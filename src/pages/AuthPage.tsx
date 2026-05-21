@@ -67,10 +67,12 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
             // Debug: log response headers to check for Set-Cookie
             console.log("[auth-verify] Response headers:", {
               "set-cookie": resp.headers.get("set-cookie"),
-              "access-control-allow-credentials":
-                resp.headers.get("access-control-allow-credentials"),
-              "access-control-allow-origin":
-                resp.headers.get("access-control-allow-origin"),
+              "access-control-allow-credentials": resp.headers.get(
+                "access-control-allow-credentials",
+              ),
+              "access-control-allow-origin": resp.headers.get(
+                "access-control-allow-origin",
+              ),
             });
             if (resp.ok) return true;
           } catch (e) {
