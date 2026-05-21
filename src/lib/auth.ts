@@ -1,7 +1,9 @@
 import { createAuthClient } from "better-auth/react";
 
+const authBaseUrl = import.meta.env.VITE_API_BASE_URL?.trim() || window.location.origin;
+
 export const authClient = createAuthClient({
-  baseURL: window.location.origin, // Proxied through Vite to http://localhost:3000
+  baseURL: authBaseUrl,
 });
 
 export const { signIn, signUp, signOut, useSession } = authClient;
