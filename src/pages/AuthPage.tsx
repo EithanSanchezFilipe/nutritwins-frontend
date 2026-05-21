@@ -36,6 +36,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
         if (res.error) {
           throw new Error(res.error.message || "Login failed");
         }
+        console.log("[auth-login] Sign-in response:", res);
       } else {
         const res = await authClient.signUp.email({
           email,
@@ -45,6 +46,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
         if (res.error) {
           throw new Error(res.error.message || "Registration failed");
         }
+        console.log("[auth-signup] Sign-up response:", res);
       }
       // After successful sign-in/up, verify the session endpoint to ensure
       // the auth cookie was set by the backend (cross-site cookies require
@@ -62,9 +64,17 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
         for (let i = 0; i < attempts; i++) {
           try {
             const resp = await fetch(url, { credentials: "include" });
+            // Debug: log response headers to check for Set-Cookie
+            console.log("[auth-verify] Response headers:", {
+              "set-cookie": resp.headers.get("set-cookie"),
+              "access-control-allow-credentials":
+                resp.headers.get("access-control-allow-credentials"),
+              "access-control-allow-origin":
+                resp.headers.get("access-control-allow-origin"),
+            });
             if (resp.ok) return true;
           } catch (e) {
-            // ignore and retry
+            console.error("[auth-verify] Fetch error:", e);
           }
           await new Promise((r) => setTimeout(r, delayMs));
         }
