@@ -8,24 +8,33 @@ import { useSession as useBetterAuthSession } from "../lib/auth";
  * cookie-based auth in development.
  */
 export const useCustomSession = () => {
+  const [session, setSession] = useState<any>(null);
+  const [isPending, setIsPending] = useState(true);
+
+  // Always call better-auth hook (required for React), but we may not use the result
   const betterAuthSession = useBetterAuthSession();
-  const [session, setSession] = useState(betterAuthSession.data);
-  const [isPending, setIsPending] = useState(betterAuthSession.isPending);
 
   useEffect(() => {
     const token = localStorage.getItem("auth_token");
 
     if (token) {
       // Token exists in localStorage → user is logged in via token-based auth
-      // Return a minimal session object to satisfy the app's requirements
-      console.log("[useCustomSession] Token found in localStorage");
-      setSession({ user: { id: "token-based-user" } } as any);
+      console.log("[useCustomSession] Token found in localStorage, skipping better-auth");
+      setSession({ user: { id: "token-based-user" } });
       setIsPending(false);
-    } else {
-      // No token → fall back to better-auth session (cookie-based)
-      console.log("[useCustomSession] No token, using better-auth session");
+    } else if (betterAuthSession.data) {
+      // No token but have better-auth session (cookie-based)
+      console.log("[useCustomSession] Using better-auth session from cookies");
       setSession(betterAuthSession.data);
       setIsPending(betterAuthSession.isPending);
+    } else if (betterAuthSession.isPending) {
+      // Still loading from better-auth
+      setIsPending(true);
+    } else {
+      // No token and no session
+      console.log("[useCustomSession] No session found");
+      setSession(null);
+      setIsPending(false);
     }
   }, [betterAuthSession.data, betterAuthSession.isPending]);
 
