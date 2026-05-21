@@ -15,7 +15,7 @@ export function App() {
   const { data: session, isPending: sessionPending } = useCustomSession();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [profilePending, setProfilePending] = useState(false);
-  
+
   const [activeTab, setActiveTab] = useState("dashboard");
   const [showOnboarding, setShowOnboarding] = useState(false);
 
@@ -68,8 +68,12 @@ export function App() {
     return (
       <div className="min-h-screen bg-gray-950 flex flex-col items-center justify-center text-center p-4">
         <div className="w-10 h-10 border-4 border-teal-500/20 border-t-teal-500 rounded-full animate-spin mb-4" />
-        <h3 className="text-sm font-bold text-white">Initializing NutriTwins</h3>
-        <p className="text-xs text-gray-500 mt-1">Establishing secure connection and retrieving profile...</p>
+        <h3 className="text-sm font-bold text-white">
+          Initializing NutriTwins
+        </h3>
+        <p className="text-xs text-gray-500 mt-1">
+          Establishing secure connection and retrieving profile...
+        </p>
       </div>
     );
   }
@@ -90,7 +94,9 @@ export function App() {
     return (
       <div className="min-h-screen bg-gray-950 flex flex-col">
         <header className="sticky top-0 z-40 w-full glass-panel border-b border-gray-800 px-4 py-3 flex items-center justify-between max-w-md mx-auto">
-          <h1 className="text-lg font-bold tracking-tight text-white leading-none">NutriTwins</h1>
+          <h1 className="text-lg font-bold tracking-tight text-white leading-none">
+            NutriTwins
+          </h1>
           <button
             onClick={async () => {
               await authClient.signOut();
@@ -140,9 +146,7 @@ export function App() {
         setActiveTab={setActiveTab}
         userName={profile?.name || session.user.name || "User"}
       />
-      <main className="flex-1 flex flex-col w-full">
-        {renderTabContent()}
-      </main>
+      <main className="flex-1 flex flex-col w-full">{renderTabContent()}</main>
     </div>
   );
 }
