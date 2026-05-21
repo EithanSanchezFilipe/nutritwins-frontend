@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Mail, Lock, User, Flame, ArrowRight, CheckCircle2, AlertCircle } from "lucide-react";
+import {
+  Mail,
+  Lock,
+  User,
+  Flame,
+  ArrowRight,
+  CheckCircle2,
+  AlertCircle,
+} from "lucide-react";
 import { authClient } from "../lib/auth";
 
 interface AuthPageProps {
@@ -41,7 +49,9 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
       onSuccess();
     } catch (err: any) {
       console.error(err);
-      setError(err.message || "An unexpected error occurred. Please try again.");
+      setError(
+        err.message || "An unexpected error occurred. Please try again.",
+      );
     } finally {
       setLoading(false);
     }
@@ -53,7 +63,9 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
         <div className="inline-flex bg-teal-500/10 p-3 rounded-2xl border border-teal-500/20 mb-3 shadow-[0_0_15px_rgba(20,184,166,0.1)]">
           <Flame className="w-8 h-8 text-teal-400 fill-teal-400/20" />
         </div>
-        <h2 className="text-3xl font-bold text-white tracking-tight">NutriTwins</h2>
+        <h2 className="text-3xl font-bold text-white tracking-tight">
+          NutriTwins
+        </h2>
         <p className="text-sm text-gray-400 mt-1">
           Your intelligent, mobile-first nutrition companion
         </p>
@@ -99,7 +111,10 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
         <form onSubmit={handleSubmit} className="space-y-4">
           {!isLogin && (
             <div className="space-y-1.5">
-              <label htmlFor="name-input" className="text-xs font-medium text-gray-400 uppercase tracking-wider">
+              <label
+                htmlFor="name-input"
+                className="text-xs font-medium text-gray-400 uppercase tracking-wider"
+              >
                 Full Name
               </label>
               <div className="relative">
@@ -120,7 +135,10 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
           )}
 
           <div className="space-y-1.5">
-            <label htmlFor="email-input" className="text-xs font-medium text-gray-400 uppercase tracking-wider">
+            <label
+              htmlFor="email-input"
+              className="text-xs font-medium text-gray-400 uppercase tracking-wider"
+            >
               Email Address
             </label>
             <div className="relative">
@@ -140,7 +158,10 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
           </div>
 
           <div className="space-y-1.5">
-            <label htmlFor="password-input" className="text-xs font-medium text-gray-400 uppercase tracking-wider">
+            <label
+              htmlFor="password-input"
+              className="text-xs font-medium text-gray-400 uppercase tracking-wider"
+            >
               Password
             </label>
             <div className="relative">
@@ -161,6 +182,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
 
           <button
             type="submit"
+            style={{ color: "white" }}
             disabled={loading}
             className="w-full mt-2 bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-400 hover:to-teal-500 active:scale-98 text-white rounded-xl py-3 text-sm font-semibold tracking-wide shadow-lg shadow-teal-950/20 flex items-center justify-center gap-2 transition-all duration-200 disabled:opacity-50"
           >

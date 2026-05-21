@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { ChefHat, Flame, AlertTriangle, X, Check, Utensils, BookOpen, Clock } from "lucide-react";
+import {
+  ChefHat,
+  Flame,
+  AlertTriangle,
+  X,
+  Check,
+  Utensils,
+  BookOpen,
+  Clock,
+} from "lucide-react";
 import { api } from "../lib/api";
 import { t } from "../lib/i18n";
 import type { RecipesResponse, RecipeSuggestion } from "../lib/api";
@@ -14,8 +23,10 @@ export const RecipesPage: React.FC<RecipesPageProps> = ({ onLogSuccess }) => {
   const [error, setError] = useState<string | null>(null);
   const [recipesData, setRecipesData] = useState<RecipesResponse | null>(null);
   const [selectedMealType, setSelectedMealType] = useState<string>(""); // Empty represents "auto" based on progression
-  const [selectedRecipe, setSelectedRecipe] = useState<RecipeSuggestion | null>(null);
-  
+  const [selectedRecipe, setSelectedRecipe] = useState<RecipeSuggestion | null>(
+    null,
+  );
+
   const [loggingRecipe, setLoggingRecipe] = useState(false);
   const [logSuccess, setLogSuccess] = useState(false);
 
@@ -27,7 +38,9 @@ export const RecipesPage: React.FC<RecipesPageProps> = ({ onLogSuccess }) => {
       setRecipesData(data);
     } catch (err: any) {
       console.error(err);
-      setError(err.message || "Failed to load recipe suggestions. Please try again.");
+      setError(
+        err.message || "Failed to load recipe suggestions. Please try again.",
+      );
     } finally {
       setLoading(false);
     }
@@ -67,7 +80,9 @@ export const RecipesPage: React.FC<RecipesPageProps> = ({ onLogSuccess }) => {
       }, 1500);
     } catch (err: any) {
       console.error(err);
-      alert(t("recipes.log_recipe_fail", "Failed to log recipe to daily journal."));
+      alert(
+        t("recipes.log_recipe_fail", "Failed to log recipe to daily journal."),
+      );
     } finally {
       setLoggingRecipe(false);
     }
@@ -89,7 +104,10 @@ export const RecipesPage: React.FC<RecipesPageProps> = ({ onLogSuccess }) => {
           {t("recipes.title", "AI Recipes")}
         </h2>
         <p className="text-xs text-gray-400">
-          {t("recipes.subtitle", "Chef-crafted recipes fitted to your leftover calories & allergies.")}
+          {t(
+            "recipes.subtitle",
+            "Chef-crafted recipes fitted to your leftover calories & allergies.",
+          )}
         </p>
       </div>
 
@@ -114,7 +132,9 @@ export const RecipesPage: React.FC<RecipesPageProps> = ({ onLogSuccess }) => {
         <div className="flex-1 flex items-center justify-center py-12">
           <div className="flex flex-col items-center gap-3">
             <div className="w-8 h-8 border-4 border-teal-500/30 border-t-teal-500 rounded-full animate-spin" />
-            <p className="text-sm text-gray-400">{t("recipes.consulting", "Consulting AI nutritionist...")}</p>
+            <p className="text-sm text-gray-400">
+              {t("recipes.consulting", "Consulting AI nutritionist...")}
+            </p>
           </div>
         </div>
       ) : error ? (
@@ -134,7 +154,9 @@ export const RecipesPage: React.FC<RecipesPageProps> = ({ onLogSuccess }) => {
             <div className="bg-amber-500/10 border border-amber-500/25 rounded-2xl p-4 flex gap-3 items-start text-xs text-amber-300">
               <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5" />
               <div className="space-y-1">
-                <span className="font-bold">{t("recipes.calorie_cap_met", "Calorie Cap Met")}</span>
+                <span className="font-bold">
+                  {t("recipes.calorie_cap_met", "Calorie Cap Met")}
+                </span>
                 <p className="leading-relaxed">{recipesData.warning}</p>
               </div>
             </div>
@@ -144,13 +166,19 @@ export const RecipesPage: React.FC<RecipesPageProps> = ({ onLogSuccess }) => {
           {recipesData && (
             <div className="grid grid-cols-2 gap-2 text-center">
               <div className="bg-gray-900/30 border border-gray-850 rounded-xl p-2.5">
-                <p className="text-[10px] text-gray-500 uppercase font-semibold">{t("recipes.remaining_today", "Remaining Today")}</p>
-                <p className={`text-sm font-bold ${recipesData.remainingCalories < 0 ? "text-red-400" : "text-teal-400"}`}>
+                <p className="text-[10px] text-gray-500 uppercase font-semibold">
+                  {t("recipes.remaining_today", "Remaining Today")}
+                </p>
+                <p
+                  className={`text-sm font-bold ${recipesData.remainingCalories < 0 ? "text-red-400" : "text-teal-400"}`}
+                >
                   {recipesData.remainingCalories} kcal
                 </p>
               </div>
               <div className="bg-gray-900/30 border border-gray-850 rounded-xl p-2.5">
-                <p className="text-[10px] text-gray-500 uppercase font-semibold">{t("recipes.target_budget", "Target Budget")}</p>
+                <p className="text-[10px] text-gray-500 uppercase font-semibold">
+                  {t("recipes.target_budget", "Target Budget")}
+                </p>
                 <p className="text-sm font-bold text-white">
                   {recipesData.targetCalories} kcal
                 </p>
@@ -183,18 +211,37 @@ export const RecipesPage: React.FC<RecipesPageProps> = ({ onLogSuccess }) => {
 
                   {/* Macros snippet */}
                   <div className="flex gap-4 text-[10px] text-gray-400 border-t border-gray-850 pt-2">
-                    <span>P: <strong className="text-amber-400">{Math.round(recipe.macros.protein)}g</strong></span>
-                    <span>C: <strong className="text-emerald-400">{Math.round(recipe.macros.carbs)}g</strong></span>
-                    <span>F: <strong className="text-indigo-400">{Math.round(recipe.macros.fat)}g</strong></span>
+                    <span>
+                      P:{" "}
+                      <strong className="text-amber-400">
+                        {Math.round(recipe.macros.protein)}g
+                      </strong>
+                    </span>
+                    <span>
+                      C:{" "}
+                      <strong className="text-emerald-400">
+                        {Math.round(recipe.macros.carbs)}g
+                      </strong>
+                    </span>
+                    <span>
+                      F:{" "}
+                      <strong className="text-indigo-400">
+                        {Math.round(recipe.macros.fat)}g
+                      </strong>
+                    </span>
                     <span className="ml-auto text-[9px] text-gray-500 flex items-center gap-1">
-                      {t("recipes.view_recipe", "View Recipe")} <BookOpen className="w-3 h-3 text-teal-500" />
+                      {t("recipes.view_recipe", "View Recipe")}{" "}
+                      <BookOpen className="w-3 h-3 text-teal-500" />
                     </span>
                   </div>
                 </GlassCard>
               ))
             ) : (
               <p className="text-xs text-gray-500 text-center py-8">
-                {t("recipes.no_recipes", "No recipes matching criteria. Change filters or log values.")}
+                {t(
+                  "recipes.no_recipes",
+                  "No recipes matching criteria. Change filters or log values.",
+                )}
               </p>
             )}
           </div>
@@ -211,7 +258,9 @@ export const RecipesPage: React.FC<RecipesPageProps> = ({ onLogSuccess }) => {
                 <span className="text-[10px] bg-teal-500/10 text-teal-400 border border-teal-500/20 px-2.5 py-0.5 rounded-full font-bold">
                   {selectedRecipe.cuisine} • {selectedRecipe.mealType}
                 </span>
-                <h3 className="text-lg font-bold text-white pr-2 mt-1">{selectedRecipe.title}</h3>
+                <h3 className="text-lg font-bold text-white pr-2 mt-1">
+                  {selectedRecipe.title}
+                </h3>
               </div>
               <button
                 onClick={() => {
@@ -227,20 +276,36 @@ export const RecipesPage: React.FC<RecipesPageProps> = ({ onLogSuccess }) => {
             {/* Macros info */}
             <div className="grid grid-cols-4 gap-2 text-center bg-gray-950/40 border border-gray-850/60 rounded-2xl p-3">
               <div className="flex flex-col">
-                <span className="text-[9px] text-gray-500 uppercase font-semibold">Calories</span>
-                <span className="text-xs font-bold text-white">{selectedRecipe.macros.calories}</span>
+                <span className="text-[9px] text-gray-500 uppercase font-semibold">
+                  Calories
+                </span>
+                <span className="text-xs font-bold text-white">
+                  {selectedRecipe.macros.calories}
+                </span>
               </div>
               <div className="flex flex-col border-l border-gray-800/60">
-                <span className="text-[9px] text-gray-500 uppercase font-semibold">Protein</span>
-                <span className="text-xs font-bold text-amber-400">{Math.round(selectedRecipe.macros.protein)}g</span>
+                <span className="text-[9px] text-gray-500 uppercase font-semibold">
+                  Protein
+                </span>
+                <span className="text-xs font-bold text-amber-400">
+                  {Math.round(selectedRecipe.macros.protein)}g
+                </span>
               </div>
               <div className="flex flex-col border-l border-gray-800/60">
-                <span className="text-[9px] text-gray-500 uppercase font-semibold">Carbs</span>
-                <span className="text-xs font-bold text-emerald-400">{Math.round(selectedRecipe.macros.carbs)}g</span>
+                <span className="text-[9px] text-gray-500 uppercase font-semibold">
+                  Carbs
+                </span>
+                <span className="text-xs font-bold text-emerald-400">
+                  {Math.round(selectedRecipe.macros.carbs)}g
+                </span>
               </div>
               <div className="flex flex-col border-l border-gray-800/60">
-                <span className="text-[9px] text-gray-500 uppercase font-semibold">Fats</span>
-                <span className="text-xs font-bold text-indigo-400">{Math.round(selectedRecipe.macros.fat)}g</span>
+                <span className="text-[9px] text-gray-500 uppercase font-semibold">
+                  Fats
+                </span>
+                <span className="text-xs font-bold text-indigo-400">
+                  {Math.round(selectedRecipe.macros.fat)}g
+                </span>
               </div>
             </div>
 
@@ -252,9 +317,14 @@ export const RecipesPage: React.FC<RecipesPageProps> = ({ onLogSuccess }) => {
               </h4>
               <div className="bg-gray-950/20 border border-gray-850 rounded-2xl p-3.5 space-y-1.5 max-h-40 overflow-y-auto">
                 {selectedRecipe.ingredients.map((ing, i) => (
-                  <div key={i} className="flex justify-between items-center text-xs border-b border-gray-800/30 last:border-0 pb-1 last:pb-0">
+                  <div
+                    key={i}
+                    className="flex justify-between items-center text-xs border-b border-gray-800/30 last:border-0 pb-1 last:pb-0"
+                  >
                     <span className="text-gray-200">{ing.name}</span>
-                    <span className="text-gray-400 font-medium">{ing.quantity} {ing.unit || ""}</span>
+                    <span className="text-gray-400 font-medium">
+                      {ing.quantity} {ing.unit || ""}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -282,14 +352,18 @@ export const RecipesPage: React.FC<RecipesPageProps> = ({ onLogSuccess }) => {
                 <button
                   onClick={() => handleLogRecipe(selectedRecipe)}
                   disabled={loggingRecipe}
+                  style={{ color: "#ffffff" }}
                   className="w-full bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-400 hover:to-teal-500 text-white rounded-xl py-3 text-sm font-bold shadow-lg shadow-teal-950/20 flex items-center justify-center gap-2 transition-all duration-200"
                 >
                   {loggingRecipe ? (
                     <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                   ) : (
                     <>
-                      <Clock className="w-4 h-4" />
-                      <span>Log this recipe as {selectedRecipe.mealType.toLowerCase()}</span>
+                      <Clock className="w-4 h-4 text-white" color="#ffffff" />
+                      <span className="text-white" style={{ color: "#ffffff" }}>
+                        Log this recipe as{" "}
+                        {selectedRecipe.mealType.toLowerCase()}
+                      </span>
                     </>
                   )}
                 </button>

@@ -1,6 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { Plus, Coffee, Utensils, Moon, HelpCircle, ChevronRight, Activity, Calendar } from "lucide-react";
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip } from "recharts";
+import {
+  Plus,
+  Coffee,
+  Utensils,
+  Moon,
+  HelpCircle,
+  ChevronRight,
+  Activity,
+  Calendar,
+} from "lucide-react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  ResponsiveContainer,
+  Tooltip,
+} from "recharts";
 import { api } from "../lib/api";
 import type { DailyLog, FoodEntry, MealType } from "../lib/api";
 import GlassCard from "../components/GlassCard";
@@ -26,7 +42,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
       try {
         setLoading(true);
         setError(null);
-        
+
         // Fetch today's log
         const log = await api.getTodayLog();
         setTodayLog(log);
@@ -36,10 +52,19 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
         setHistoryLogs(history);
       } catch (err: any) {
         console.error("Dashboard Fetch Error:", err);
-        if (err.status === 400 && err.message === "User target calories not set") {
+        if (
+          err.status === 400 &&
+          err.message === "User target calories not set"
+        ) {
           onOnboardingRedirect();
         } else {
-          setError(err.message || t("dash.dashboard_fetch_failed", "Failed to load dashboard data."));
+          setError(
+            err.message ||
+              t(
+                "dash.dashboard_fetch_failed",
+                "Failed to load dashboard data.",
+              ),
+          );
         }
       } finally {
         setLoading(false);
@@ -54,7 +79,9 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
       <div className="flex-1 flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
           <div className="w-8 h-8 border-4 border-teal-500/30 border-t-teal-500 rounded-full animate-spin" />
-          <p className="text-sm text-gray-400">{t("dash.loading_journal", "Loading daily journal...")}</p>
+          <p className="text-sm text-gray-400">
+            {t("dash.loading_journal", "Loading daily journal...")}
+          </p>
         </div>
       </div>
     );
@@ -64,7 +91,9 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
     return (
       <div className="flex-1 flex flex-col justify-center items-center px-4 text-center">
         <GlassCard className="max-w-xs border-red-500/20">
-          <h3 className="text-red-400 font-bold mb-2">{t("dash.error_loading_dashboard", "Error Loading Dashboard")}</h3>
+          <h3 className="text-red-400 font-bold mb-2">
+            {t("dash.error_loading_dashboard", "Error Loading Dashboard")}
+          </h3>
           <p className="text-xs text-gray-400 mb-4">{error}</p>
           <button
             onClick={() => window.location.reload()}
@@ -84,7 +113,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   let protein = 0;
   let carbs = 0;
   let fat = 0;
-  
+
   if (todayLog?.entries) {
     todayLog.entries.forEach((e) => {
       protein += e.protein ?? 0;
@@ -94,7 +123,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   }
 
   // Calculate dynamic target macros based on typical 30-40-30 distribution
-  const targetProtein = Math.round((targetCal * 0.3) / 4);
+  const targetProtein = Math.round((targetCal * 0.23 ) / 4);
   const targetCarbs = Math.round((targetCal * 0.4) / 4);
   const targetFat = Math.round((targetCal * 0.3) / 9);
 
@@ -118,17 +147,15 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   const lang = getLang();
   const locale = lang === "fr" ? "fr-FR" : lang === "es" ? "es-ES" : "en-US";
 
-  const chartData = historyLogs
-    .slice(-7)
-    .map((log) => {
-      const dateObj = new Date(log.date);
-      const dayLabel = dateObj.toLocaleDateString(locale, { weekday: "short" });
-      return {
-        name: dayLabel,
-        Consumed: log.consumedCalories,
-        Target: log.targetCalories,
-      };
-    });
+  const chartData = historyLogs.slice(-7).map((log) => {
+    const dateObj = new Date(log.date);
+    const dayLabel = dateObj.toLocaleDateString(locale, { weekday: "short" });
+    return {
+      name: dayLabel,
+      Consumed: log.consumedCalories,
+      Target: log.targetCalories,
+    };
+  });
 
   // Dynamic greetings
   const getGreeting = () => {
@@ -172,7 +199,9 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
       {/* Dynamic greeting header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-white tracking-tight">{getGreeting()}!</h2>
+          <h2 className="text-2xl font-bold text-white tracking-tight">
+            {getGreeting()}!
+          </h2>
           <p className="text-xs text-gray-400 flex items-center gap-1.5 mt-0.5">
             <Activity className="w-3.5 h-3.5 text-teal-400" />
             {t("dash.status", "Here is your metabolic status for today.")}
@@ -190,42 +219,54 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
         <MacroRing consumed={consumedCal} target={targetCal} />
 
         {/* Macro Progress Details */}
-        <div className="w-full grid grid-cols-3 gap-3 mt-6 pt-5 border-t border-gray-800/60">
+        <div className="w-full grid grid-cols-3 md:grid-cols-3 gap-3 mt-6 pt-5 border-t border-gray-800/60">
           <div className="flex flex-col">
-              <div className="flex justify-between items-center text-[10px] text-gray-500 font-semibold mb-1">
-               <span>{t("dash.protein", "Protein").toUpperCase()}</span>
-               <span className="text-gray-300 font-bold">{Math.round(protein)}/{targetProtein}g</span>
+            <div className="flex flex-col text-[10px] text-gray-500 font-semibold mb-1">
+              <span>{t("dash.protein", "Protein").toUpperCase()}</span>
+              <span className="text-gray-300 font-bold mt-0.5">
+                {Math.round(protein)}/{targetProtein}g
+              </span>
             </div>
             <div className="w-full bg-gray-900 rounded-full h-1">
               <div
                 className="bg-amber-400 h-1 rounded-full transition-all duration-300"
-                style={{ width: `${Math.min(100, (protein / (targetProtein || 1)) * 100)}%` }}
+                style={{
+                  width: `${Math.min(100, (protein / (targetProtein || 1)) * 100)}%`,
+                }}
               />
             </div>
           </div>
 
           <div className="flex flex-col">
-              <div className="flex justify-between items-center text-[10px] text-gray-500 font-semibold mb-1">
+            <div className="flex flex-col text-[10px] text-gray-500 font-semibold mb-1">
               <span>{t("dash.carbs", "Carbs").toUpperCase()}</span>
-              <span className="text-gray-300 font-bold">{Math.round(carbs)}/{targetCarbs}g</span>
+              <span className="text-gray-300 font-bold mt-0.5">
+                {Math.round(carbs)}/{targetCarbs}g
+              </span>
             </div>
             <div className="w-full bg-gray-900 rounded-full h-1">
               <div
                 className="bg-emerald-400 h-1 rounded-full transition-all duration-300"
-                style={{ width: `${Math.min(100, (carbs / (targetCarbs || 1)) * 100)}%` }}
+                style={{
+                  width: `${Math.min(100, (carbs / (targetCarbs || 1)) * 100)}%`,
+                }}
               />
             </div>
           </div>
 
           <div className="flex flex-col">
-              <div className="flex justify-between items-center text-[10px] text-gray-500 font-semibold mb-1">
+            <div className="flex flex-col text-[10px] text-gray-500 font-semibold mb-1">
               <span>{t("dash.fat", "Fat").toUpperCase()}</span>
-              <span className="text-gray-300 font-bold">{Math.round(fat)}/{targetFat}g</span>
+              <span className="text-gray-300 font-bold mt-0.5">
+                {Math.round(fat)}/{targetFat}g
+              </span>
             </div>
             <div className="w-full bg-gray-900 rounded-full h-1">
               <div
                 className="bg-indigo-400 h-1 rounded-full transition-all duration-300"
-                style={{ width: `${Math.min(100, (fat / (targetFat || 1)) * 100)}%` }}
+                style={{
+                  width: `${Math.min(100, (fat / (targetFat || 1)) * 100)}%`,
+                }}
               />
             </div>
           </div>
@@ -246,7 +287,10 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
               {t("dash.log_meal_card_title", "Log what you ate")}
             </h4>
             <p className="text-[10px] text-teal-400/80">
-              {t("dash.log_meal_card_sub", "Analyze food with AI photos or descriptions")}
+              {t(
+                "dash.log_meal_card_sub",
+                "Analyze food with AI photos or descriptions",
+              )}
             </p>
           </div>
         </div>
@@ -264,7 +308,10 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           {(Object.keys(entriesByMeal) as MealType[]).map((meal) => {
             const meals = entriesByMeal[meal];
             const hasMeals = meals.length > 0;
-            const mealCalories = meals.reduce((sum, item) => sum + item.calories, 0);
+            const mealCalories = meals.reduce(
+              (sum, item) => sum + item.calories,
+              0,
+            );
 
             return (
               <GlassCard key={meal} className="p-3">
@@ -278,28 +325,43 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                     </span>
                   </div>
                   <span className="text-xs font-semibold text-gray-400">
-                    {hasMeals ? `${mealCalories} kcal` : t("dash.zero_kcal", "0 kcal")}
+                    {hasMeals
+                      ? `${mealCalories} kcal`
+                      : t("dash.zero_kcal", "0 kcal")}
                   </span>
                 </div>
 
                 {hasMeals ? (
                   <div className="mt-2.5 space-y-2 border-t border-gray-800/40 pt-2">
                     {meals.map((item) => (
-                      <div key={item.id} className="flex justify-between items-center text-xs pl-1">
+                      <div
+                        key={item.id}
+                        className="flex justify-between items-center text-xs pl-1"
+                      >
                         <div className="flex flex-col">
-                          <span className="font-semibold text-gray-200">{item.description}</span>
+                          <span className="font-semibold text-gray-200">
+                            {item.description}
+                          </span>
                           <span className="text-[9px] text-gray-500">
-                            {item.protein ? `${Math.round(item.protein)}g P` : ""}
-                            {item.carbs ? ` • ${Math.round(item.carbs)}g C` : ""}
+                            {item.protein
+                              ? `${Math.round(item.protein)}g P`
+                              : ""}
+                            {item.carbs
+                              ? ` • ${Math.round(item.carbs)}g C`
+                              : ""}
                             {item.fat ? ` • ${Math.round(item.fat)}g F` : ""}
                           </span>
                         </div>
-                        <span className="font-medium text-teal-400">{item.calories} kcal</span>
+                        <span className="font-medium text-teal-400">
+                          {item.calories} kcal
+                        </span>
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <p className="text-[10px] text-gray-500 mt-1 pl-1">{t("dash.empty_entries", "No food entries logged.")}</p>
+                  <p className="text-[10px] text-gray-500 mt-1 pl-1">
+                    {t("dash.empty_entries", "No food entries logged.")}
+                  </p>
                 )}
               </GlassCard>
             );
@@ -316,17 +378,32 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           </h3>
           <GlassCard className="h-44 py-2 px-1">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={chartData} margin={{ top: 5, right: 5, left: -25, bottom: 5 }}>
-                <XAxis dataKey="name" stroke="#9ca3af" fontSize={10} tickLine={false} axisLine={false} />
-                <YAxis stroke="#9ca3af" fontSize={10} tickLine={false} axisLine={false} />
+              <BarChart
+                data={chartData}
+                margin={{ top: 5, right: 5, left: -25, bottom: 5 }}
+              >
+                <XAxis
+                  dataKey="name"
+                  stroke="#9ca3af"
+                  fontSize={10}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <YAxis
+                  stroke="#9ca3af"
+                  fontSize={10}
+                  tickLine={false}
+                  axisLine={false}
+                />
                 <Tooltip
                   cursor={{ fill: "rgba(0, 0, 0, 0.03)", radius: 4 }}
                   formatter={(value, name) => {
-                    const label = name === "Consumed"
-                      ? t("dash.consumed", "Consumed")
-                      : name === "Target"
-                      ? t("dash.target", "Target")
-                      : String(name);
+                    const label =
+                      name === "Consumed"
+                        ? t("dash.consumed", "Consumed")
+                        : name === "Target"
+                          ? t("dash.target", "Target")
+                          : String(name);
                     return [value, label];
                   }}
                   contentStyle={{
@@ -337,7 +414,12 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                     fontSize: "11px",
                   }}
                 />
-                <Bar dataKey="Consumed" fill="#111827" radius={[4, 4, 0, 0]} maxBarSize={30} />
+                <Bar
+                  dataKey="Consumed"
+                  fill="#111827"
+                  radius={[4, 4, 0, 0]}
+                  maxBarSize={30}
+                />
               </BarChart>
             </ResponsiveContainer>
           </GlassCard>
