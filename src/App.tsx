@@ -11,16 +11,7 @@ import RecipesPage from "./pages/RecipesPage";
 import ProfilePage from "./pages/ProfilePage";
 
 export function App() {
-  // Check localStorage for token first (production/token-based auth)
-  const [session, setSession] = useState<any>(() => {
-    const token = localStorage.getItem("auth_token");
-    if (token) {
-      console.log("[App] Token found in localStorage");
-      return { user: { id: "token-based-user" } };
-    }
-    return null;
-  });
-  const [sessionPending, setSessionPending] = useState(!session ? true : false);
+  const { data: session, isPending: sessionPending } = authClient.useSession();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [profilePending, setProfilePending] = useState(false);
 

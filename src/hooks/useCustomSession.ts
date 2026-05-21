@@ -19,7 +19,9 @@ export const useCustomSession = () => {
 
     if (token) {
       // Token exists in localStorage → user is logged in via token-based auth
-      console.log("[useCustomSession] Token found in localStorage, skipping better-auth");
+      console.log(
+        "[useCustomSession] Token found in localStorage, skipping better-auth",
+      );
       setSession({ user: { id: "token-based-user" } });
       setIsPending(false);
     } else if (betterAuthSession.data) {
