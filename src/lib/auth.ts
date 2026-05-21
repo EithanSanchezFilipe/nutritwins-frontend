@@ -13,4 +13,11 @@ export const authClient = createAuthClient({
   fetch: withCredentials as any,
 });
 
-export const { signIn, signUp, signOut, useSession } = authClient;
+const baseSignOut = authClient.signOut;
+
+export const signOut = async () => {
+  localStorage.removeItem("auth_token");
+  return baseSignOut();
+};
+
+export const { signIn, signUp, useSession } = authClient;

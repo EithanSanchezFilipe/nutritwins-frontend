@@ -36,6 +36,12 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
         if (res.error) {
           throw new Error(res.error.message || "Login failed");
         }
+        // Manual token storage workaround: backend returns token in response body
+        if (res.data?.token) {
+          // Store token in localStorage as fallback
+          localStorage.setItem("auth_token", res.data.token);
+          console.log("[auth-login] Token stored manually:", res.data.token);
+        }
         console.log("[auth-login] Sign-in response:", res);
       } else {
         const res = await authClient.signUp.email({
@@ -46,20 +52,22 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
         if (res.error) {
           throw new Error(res.error.message || "Registration failed");
         }
+        // Manual token storage workaround: backend returns token in response body
+        if (res.data?.token) {
+          localStorage.setItem("auth_token", res.data.token);
+          console.log("[auth-signup] Token stored manually:", res.data.token);
+        }
         console.log("[auth-signup] Sign-up response:", res);
       }
-      // Cookies are already set by the backend and stored in the browser.
-      // Simply check if they exist locally, then proceed.
-      const hasCookies = document.cookie && document.cookie.length > 0;
+      // Verify token was stored
+      const storedToken = localStorage.getItem("auth_token");
       console.log(
-        "[auth] Cookies after login:",
-        hasCookies ? document.cookie : "<none>",
+        "[auth] Token stored:",
+        storedToken ? `${storedToken.substring(0, 8)}...` : "<none>",
       );
 
-      if (!hasCookies) {
-        setError(
-          "Login succeeded but no session cookie found. Try refreshing the page.",
-        );
+      if (!storedToken) {
+        setError("Login succeeded but token was not stored.");
         return;
       }
 
