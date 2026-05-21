@@ -106,16 +106,14 @@ const buildApiUrl = (path: string) => {
 
 // API Fetcher Client
 async function apiFetch<T>(url: string, options: RequestInit = {}): Promise<T> {
-  const token = localStorage.getItem("auth_token");
   const defaults: RequestInit = {
-    credentials: "include", // Ensure cookies are sent/accepted for cross-origin requests
+    credentials: "include", // Ensure cookies are sent for same-origin requests
     headers: {
       Accept: "application/json",
       "Cache-Control": "no-cache",
       Pragma: "no-cache",
       "x-timezone-offset": new Date().getTimezoneOffset().toString(),
       "x-app-language": localStorage.getItem("nutritwins_lang") || "en",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...(!(options.body instanceof FormData) &&
       !(options.body instanceof ArrayBuffer) &&
       !(options.body instanceof Blob)

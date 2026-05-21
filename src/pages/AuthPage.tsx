@@ -36,13 +36,6 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
         if (res.error) {
           throw new Error(res.error.message || "Login failed");
         }
-        // Manual token storage workaround: backend returns token in response body
-        if (res.data?.token) {
-          // Store token in localStorage as fallback
-          localStorage.setItem("auth_token", res.data.token);
-          console.log("[auth-login] Token stored manually:", res.data.token);
-        }
-        console.log("[auth-login] Sign-in response:", res);
       } else {
         const res = await authClient.signUp.email({
           email,
@@ -52,25 +45,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
         if (res.error) {
           throw new Error(res.error.message || "Registration failed");
         }
-        // Manual token storage workaround: backend returns token in response body
-        if (res.data?.token) {
-          localStorage.setItem("auth_token", res.data.token);
-          console.log("[auth-signup] Token stored manually:", res.data.token);
-        }
-        console.log("[auth-signup] Sign-up response:", res);
       }
-      // Verify token was stored
-      const storedToken = localStorage.getItem("auth_token");
-      console.log(
-        "[auth] Token stored:",
-        storedToken ? `${storedToken.substring(0, 8)}...` : "<none>",
-      );
-
-      if (!storedToken) {
-        setError("Login succeeded but token was not stored.");
-        return;
-      }
-
       onSuccess();
     } catch (err: any) {
       console.error(err);
