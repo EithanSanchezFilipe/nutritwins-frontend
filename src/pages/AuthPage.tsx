@@ -46,6 +46,36 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
           throw new Error(res.error.message || "Registration failed");
         }
       }
+      // After successful sign-in/up, verify the session endpoint to ensure
+      // the auth cookie was set by the backend (cross-site cookies require
+      // correct SameSite/Secure settings and CORS Allow-Credentials).
+      const apiBase = import.meta.env.VITE_API_BASE_URL?.trim() || "";
+      const buildUrl = (path: string) => {
+        const normalized = path.startsWith("/") ? path : `/${path}`;
+        return apiBase ? `${apiBase.replace(/\/$/, "")}${normalized}` : normalized;
+      };
+
+      const verifySession = async (attempts = 5, delayMs = 500) => {
+        const url = buildUrl("/api/auth/get-session");
+        for (let i = 0; i < attempts; i++) {
+          try {
+            const resp = await fetch(url, { credentials: "include" });
+            if (resp.ok) return true;
+          } catch (e) {
+            // ignore and retry
+          }
+          await new Promise((r) => setTimeout(r, delayMs));
+        }
+        return false;
+      };
+
+      const ok = await verifySession();
+      if (!ok) {
+        setError(
+          "Login succeeded but session cookie was not stored. Check backend Set-Cookie SameSite/ Secure flags and CORS Allow-Credentials."
+        );
+        return;
+      }
       onSuccess();
     } catch (err: any) {
       console.error(err);
