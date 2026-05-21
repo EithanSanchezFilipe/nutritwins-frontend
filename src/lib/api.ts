@@ -107,7 +107,7 @@ const buildApiUrl = (path: string) => {
 // API Fetcher Client
 async function apiFetch<T>(url: string, options: RequestInit = {}): Promise<T> {
   const defaults: RequestInit = {
-    credentials: "same-origin", // Enable cookie forwarding
+    credentials: "include", // Ensure cookies are sent/accepted for cross-origin requests
     headers: {
       Accept: "application/json",
       "Cache-Control": "no-cache",

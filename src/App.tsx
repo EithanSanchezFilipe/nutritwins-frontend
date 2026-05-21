@@ -48,7 +48,9 @@ export function App() {
   }, [session]);
 
   const handleAuthSuccess = () => {
-    // Auth client will trigger session update automatically
+    // Auth client should trigger session update automatically, but
+    // force a full reload to ensure the session is read after login.
+    window.location.reload();
   };
 
   const handleOnboardingComplete = async () => {
