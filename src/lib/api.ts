@@ -34,7 +34,11 @@ export interface UserStats {
   birthDate: string;
   height: number;
   weight: number;
-  activityLevel: "SEDENTARY" | "LIGHTLY_ACTIVE" | "MODERATELY_ACTIVE" | "VERY_ACTIVE";
+  activityLevel:
+    | "SEDENTARY"
+    | "LIGHTLY_ACTIVE"
+    | "MODERATELY_ACTIVE"
+    | "VERY_ACTIVE";
   goal: "LOSE_WEIGHT" | "MAINTAIN" | "GAIN_MUSCLE";
 }
 
@@ -93,7 +97,9 @@ export const getApiBaseUrl = () => {
   if (API_BASE_URL) {
     console.info("[api] VITE_API_BASE_URL=", API_BASE_URL);
   } else {
-    console.warn("[api] VITE_API_BASE_URL is not set, falling back to relative paths");
+    console.warn(
+      "[api] VITE_API_BASE_URL is not set, falling back to relative paths",
+    );
   }
   return API_BASE_URL;
 };
@@ -112,12 +118,14 @@ async function apiFetch<T>(url: string, options: RequestInit = {}): Promise<T> {
   const defaults: RequestInit = {
     credentials: "same-origin", // Enable cookie forwarding
     headers: {
-      "Accept": "application/json",
+      Accept: "application/json",
       "Cache-Control": "no-cache",
-      "Pragma": "no-cache",
+      Pragma: "no-cache",
       "x-timezone-offset": new Date().getTimezoneOffset().toString(),
       "x-app-language": localStorage.getItem("nutritwins_lang") || "en",
-      ...(!(options.body instanceof FormData) && !(options.body instanceof ArrayBuffer) && !(options.body instanceof Blob)
+      ...(!(options.body instanceof FormData) &&
+      !(options.body instanceof ArrayBuffer) &&
+      !(options.body instanceof Blob)
         ? { "Content-Type": "application/json" }
         : {}),
     },
@@ -167,16 +175,17 @@ export const api = {
     }),
 
   // Daily Logs endpoints
-  getTodayLog: () =>
-    apiFetch<DailyLog>("/api/daily-logs/today"),
+  getTodayLog: () => apiFetch<DailyLog>("/api/daily-logs/today"),
 
-  getAllLogs: () =>
-    apiFetch<DailyLog[]>("/api/daily-logs"),
+  getAllLogs: () => apiFetch<DailyLog[]>("/api/daily-logs"),
 
-  getLogById: (id: string) =>
-    apiFetch<DailyLog>(`/api/daily-logs/${id}`),
+  getLogById: (id: string) => apiFetch<DailyLog>(`/api/daily-logs/${id}`),
 
-  addFoodEntry: (entry: { mealType: MealType; dishName: string; macros: Macros }) =>
+  addFoodEntry: (entry: {
+    mealType: MealType;
+    dishName: string;
+    macros: Macros;
+  }) =>
     apiFetch<FoodEntry>("/api/daily-logs/entries", {
       method: "POST",
       body: JSON.stringify(entry),
@@ -205,13 +214,14 @@ export const api = {
 
   // Recipe Suggestions endpoints
   getRecipeSuggestions: (mealType?: string) => {
-    const url = mealType ? `/api/recipes/suggestions?mealType=${mealType}` : "/api/recipes/suggestions";
+    const url = mealType
+      ? `/api/recipes/suggestions?mealType=${mealType}`
+      : "/api/recipes/suggestions";
     return apiFetch<RecipesResponse>(url);
   },
 
   // Profile endpoints
-  getProfile: () =>
-    apiFetch<UserProfile>("/api/calories/profile"),
+  getProfile: () => apiFetch<UserProfile>("/api/calories/profile"),
 
   updateAllergies: (allergies: string[]) =>
     apiFetch<{ allergies: string[] }>("/api/calories/allergies", {
