@@ -52,7 +52,9 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
       const apiBase = import.meta.env.VITE_API_BASE_URL?.trim() || "";
       const buildUrl = (path: string) => {
         const normalized = path.startsWith("/") ? path : `/${path}`;
-        return apiBase ? `${apiBase.replace(/\/$/, "")}${normalized}` : normalized;
+        return apiBase
+          ? `${apiBase.replace(/\/$/, "")}${normalized}`
+          : normalized;
       };
 
       const verifySession = async (attempts = 5, delayMs = 500) => {
@@ -72,7 +74,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
       const ok = await verifySession();
       if (!ok) {
         setError(
-          "Login succeeded but session cookie was not stored. Check backend Set-Cookie SameSite/ Secure flags and CORS Allow-Credentials."
+          "Login succeeded but session cookie was not stored. Check backend Set-Cookie SameSite/ Secure flags and CORS Allow-Credentials.",
         );
         return;
       }
