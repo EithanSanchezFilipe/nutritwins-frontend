@@ -409,6 +409,7 @@ export const OnboardingPage: React.FC<OnboardingPageProps> = ({
 
           <button
             onClick={onComplete}
+            style={{ color: "white" }}
             className="w-full bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-400 hover:to-teal-500 text-white rounded-xl py-3 text-sm font-semibold tracking-wide shadow-lg shadow-teal-950/20 flex items-center justify-center gap-2 transition-all duration-200"
           >
             <span>Start Tracking Food</span>
