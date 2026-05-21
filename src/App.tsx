@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { authClient, useSession } from "./lib/auth";
+import { authClient } from "./lib/auth";
+import { useCustomSession } from "./hooks/useCustomSession";
 import { api } from "./lib/api";
 import type { UserProfile } from "./lib/api";
 import Navbar from "./components/Navbar";
@@ -11,7 +12,7 @@ import RecipesPage from "./pages/RecipesPage";
 import ProfilePage from "./pages/ProfilePage";
 
 export function App() {
-  const { data: session, isPending: sessionPending } = useSession();
+  const { data: session, isPending: sessionPending } = useCustomSession();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [profilePending, setProfilePending] = useState(false);
   
