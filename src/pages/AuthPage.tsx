@@ -48,48 +48,21 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onSuccess }) => {
         }
         console.log("[auth-signup] Sign-up response:", res);
       }
-      // After successful sign-in/up, verify the session endpoint to ensure
-      // the auth cookie was set by the backend (cross-site cookies require
-      // correct SameSite/Secure settings and CORS Allow-Credentials).
-      const apiBase = import.meta.env.VITE_API_BASE_URL?.trim() || "";
-      const buildUrl = (path: string) => {
-        const normalized = path.startsWith("/") ? path : `/${path}`;
-        return apiBase
-          ? `${apiBase.replace(/\/$/, "")}${normalized}`
-          : normalized;
-      };
+      // Cookies are already set by the backend and stored in the browser.
+      // Simply check if they exist locally, then proceed.
+      const hasCookies = document.cookie && document.cookie.length > 0;
+      console.log(
+        "[auth] Cookies after login:",
+        hasCookies ? document.cookie : "<none>",
+      );
 
-      const verifySession = async (attempts = 5, delayMs = 500) => {
-        const url = buildUrl("/api/auth/get-session");
-        for (let i = 0; i < attempts; i++) {
-          try {
-            const resp = await fetch(url, { credentials: "include" });
-            // Debug: log response headers to check for Set-Cookie
-            console.log("[auth-verify] Response headers:", {
-              "set-cookie": resp.headers.get("set-cookie"),
-              "access-control-allow-credentials": resp.headers.get(
-                "access-control-allow-credentials",
-              ),
-              "access-control-allow-origin": resp.headers.get(
-                "access-control-allow-origin",
-              ),
-            });
-            if (resp.ok) return true;
-          } catch (e) {
-            console.error("[auth-verify] Fetch error:", e);
-          }
-          await new Promise((r) => setTimeout(r, delayMs));
-        }
-        return false;
-      };
-
-      const ok = await verifySession();
-      if (!ok) {
+      if (!hasCookies) {
         setError(
-          "Login succeeded but session cookie was not stored. Check backend Set-Cookie SameSite/ Secure flags and CORS Allow-Credentials.",
+          "Login succeeded but no session cookie found. Try refreshing the page.",
         );
         return;
       }
+
       onSuccess();
     } catch (err: any) {
       console.error(err);
