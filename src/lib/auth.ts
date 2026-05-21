@@ -1,9 +1,9 @@
 import { createAuthClient } from "better-auth/react";
 
-const authBaseUrl =
-  import.meta.env.VITE_API_BASE_URL?.trim() || window.location.origin;
+// With the Vercel proxy, auth requests go through the same origin.
+// Never use VITE_API_BASE_URL here — that would bypass the proxy.
+const authBaseUrl = window.location.origin;
 
-// Custom fetch that ensures credentials are sent for better-auth's own requests
 const withCredentials = (input: RequestInfo, init?: RequestInit) => {
   return fetch(input, { ...init, credentials: "include" });
 };

@@ -1,5 +1,3 @@
-// Type definitions based on backend schemas
-
 export type MealType = "BREAKFAST" | "LUNCH" | "DINNER" | "SNACK";
 
 export interface Macros {
@@ -91,23 +89,26 @@ export interface RecipesResponse {
   suggestions: RecipeSuggestion[];
 }
 
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.trim() || "";
+export interface UserProfile extends UserStats {
+  id: string;
+  name: string;
+  email: string;
+  bmr: number | null;
+  tdee: number | null;
+  targetCal: number | null;
+  allergies: string[];
+}
 
-export const getApiBaseUrl = () => API_BASE_URL;
-
+// All requests are relative — Vercel proxy forwards /api/* to Render.
+// Never use an absolute base URL here; that bypasses the proxy and breaks cookies.
 const buildApiUrl = (path: string) => {
-  if (/^https?:\/\//.test(path)) {
-    return path;
-  }
-  const base = API_BASE_URL.replace(/\/$/, "");
   const normalizedPath = path.startsWith("/") ? path : `/${path}`;
-  return base ? `${base}${normalizedPath}` : normalizedPath;
+  return normalizedPath;
 };
 
-// API Fetcher Client
 async function apiFetch<T>(url: string, options: RequestInit = {}): Promise<T> {
-  const defaults: RequestInit = {
-    credentials: "include", // Ensure cookies are sent for same-origin requests
+  const config: RequestInit = {
+    credentials: "include",
     headers: {
       Accept: "application/json",
       "Cache-Control": "no-cache",
@@ -119,16 +120,9 @@ async function apiFetch<T>(url: string, options: RequestInit = {}): Promise<T> {
       !(options.body instanceof Blob)
         ? { "Content-Type": "application/json" }
         : {}),
-    },
-  };
-
-  const config = {
-    ...defaults,
-    ...options,
-    headers: {
-      ...defaults.headers,
       ...options.headers,
     },
+    ...options,
   };
 
   const response = await fetch(buildApiUrl(url), config);
@@ -146,7 +140,6 @@ async function apiFetch<T>(url: string, options: RequestInit = {}): Promise<T> {
     throw error;
   }
 
-  // Handle empty bodies (like 204 No Content)
   const contentType = response.headers.get("content-type");
   if (contentType && contentType.includes("application/json")) {
     return response.json() as Promise<T>;
@@ -155,17 +148,12 @@ async function apiFetch<T>(url: string, options: RequestInit = {}): Promise<T> {
 }
 
 export const api = {
-  // Runtime check helper
-  getBaseUrl: getApiBaseUrl,
-
-  // Calories endpoints
   calculateCalories: (data: UserStats) =>
     apiFetch<CalculateCaloriesResult>("/api/calories/calculate", {
       method: "POST",
       body: JSON.stringify(data),
     }),
 
-  // Daily Logs endpoints
   getTodayLog: () => apiFetch<DailyLog>("/api/daily-logs/today"),
 
   getAllLogs: () => apiFetch<DailyLog[]>("/api/daily-logs"),
@@ -182,20 +170,14 @@ export const api = {
       body: JSON.stringify(entry),
     }),
 
-  // Food Entry Analysis endpoints
-  analyzeImage: (image: File | Blob) => {
-    // If it's direct upload, backend accepts image/* directly or multipart
-    // Let's send as binary directly or as FormData depending on backend capability
-    // Backend code handles content-type startsWith("image/") by parsing request.body as Buffer
-    // Let's send as binary with appropriate content-type headers!
-    return apiFetch<FoodAnalysisResponse>("/api/food-entry/analyze/image", {
+  analyzeImage: (image: File | Blob) =>
+    apiFetch<FoodAnalysisResponse>("/api/food-entry/analyze/image", {
       method: "POST",
       headers: {
         "Content-Type": image.type || "image/jpeg",
       },
       body: image,
-    });
-  },
+    }),
 
   analyzeText: (description: string) =>
     apiFetch<FoodAnalysisResponse>("/api/food-entry/analyze/text", {
@@ -203,7 +185,6 @@ export const api = {
       body: JSON.stringify({ description }),
     }),
 
-  // Recipe Suggestions endpoints
   getRecipeSuggestions: (mealType?: string) => {
     const url = mealType
       ? `/api/recipes/suggestions?mealType=${mealType}`
@@ -211,7 +192,6 @@ export const api = {
     return apiFetch<RecipesResponse>(url);
   },
 
-  // Profile endpoints
   getProfile: () => apiFetch<UserProfile>("/api/calories/profile"),
 
   updateAllergies: (allergies: string[]) =>
@@ -220,13 +200,3 @@ export const api = {
       body: JSON.stringify({ allergies }),
     }),
 };
-
-export interface UserProfile extends UserStats {
-  id: string;
-  name: string;
-  email: string;
-  bmr: number | null;
-  tdee: number | null;
-  targetCal: number | null;
-  allergies: string[];
-}
