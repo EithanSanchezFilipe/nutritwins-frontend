@@ -1,6 +1,9 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -8,10 +11,10 @@ export default defineConfig({
   server: {
     allowedHosts: true,
     proxy: {
-      '/api': {
-        target: 'http://localhost:3000',
+      "/api": {
+        target: process.env.VITE_API_BASE_URL || "http://localhost:3000",
         changeOrigin: true,
       },
     },
   },
-})
+});

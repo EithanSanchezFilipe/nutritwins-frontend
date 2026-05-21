@@ -87,6 +87,17 @@ export interface RecipesResponse {
   suggestions: RecipeSuggestion[];
 }
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.trim() || "";
+
+const buildApiUrl = (path: string) => {
+  if (/^https?:\/\//.test(path)) {
+    return path;
+  }
+  const base = API_BASE_URL.replace(/\/$/, "");
+  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+  return base ? `${base}${normalizedPath}` : normalizedPath;
+};
+
 // API Fetcher Client
 async function apiFetch<T>(url: string, options: RequestInit = {}): Promise<T> {
   const defaults: RequestInit = {
@@ -112,7 +123,7 @@ async function apiFetch<T>(url: string, options: RequestInit = {}): Promise<T> {
     },
   };
 
-  const response = await fetch(url, config);
+  const response = await fetch(buildApiUrl(url), config);
 
   if (!response.ok) {
     let errorMessage = "An error occurred";
