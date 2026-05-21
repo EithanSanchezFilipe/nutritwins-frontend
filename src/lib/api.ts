@@ -87,7 +87,16 @@ export interface RecipesResponse {
   suggestions: RecipeSuggestion[];
 }
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.trim() || "";
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.trim() || "";
+
+export const getApiBaseUrl = () => {
+  if (API_BASE_URL) {
+    console.info("[api] VITE_API_BASE_URL=", API_BASE_URL);
+  } else {
+    console.warn("[api] VITE_API_BASE_URL is not set, falling back to relative paths");
+  }
+  return API_BASE_URL;
+};
 
 const buildApiUrl = (path: string) => {
   if (/^https?:\/\//.test(path)) {
@@ -147,6 +156,9 @@ async function apiFetch<T>(url: string, options: RequestInit = {}): Promise<T> {
 }
 
 export const api = {
+  // Runtime check helper
+  getBaseUrl: getApiBaseUrl,
+
   // Calories endpoints
   calculateCalories: (data: UserStats) =>
     apiFetch<CalculateCaloriesResult>("/api/calories/calculate", {
