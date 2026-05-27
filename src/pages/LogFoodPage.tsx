@@ -25,30 +25,30 @@ interface Tab {
   icon: React.ReactNode;
 }
 
-const TABS: Tab[] = [
-  {
-    id: "image",
-    label: "Photo",
-    icon: <Camera className="w-4 h-4" />,
-  },
-  {
-    id: "text",
-    label: "Text",
-    icon: <FileText className="w-4 h-4" />,
-  },
-  {
-    id: "qr",
-    label: "Scan",
-    icon: <ScanLine className="w-4 h-4" />,
-  },
-];
-
 interface LogFoodPageProps {
   onSuccess: () => void;
 }
 
 export const LogFoodPage: React.FC<LogFoodPageProps> = ({ onSuccess }) => {
   const [activeTab, setActiveTab] = useState<TabId>("image");
+
+  const TABS: Tab[] = [
+    {
+      id: "image",
+      label: t("log.tab_image", "Photo"),
+      icon: <Camera className="w-4 h-4" />,
+    },
+    {
+      id: "text",
+      label: t("log.tab_text", "Text"),
+      icon: <FileText className="w-4 h-4" />,
+    },
+    {
+      id: "qr",
+      label: t("log.tab_qr", "Scan"),
+      icon: <ScanLine className="w-4 h-4" />,
+    },
+  ];
   const [error, setError] = useState<string | null>(null);
   const [isNotFoodError, setIsNotFoodError] = useState<boolean>(false);
 
@@ -98,9 +98,10 @@ export const LogFoodPage: React.FC<LogFoodPageProps> = ({ onSuccess }) => {
     try {
       await api.addFoodEntry(data);
       onSuccess();
-    } catch (err: any) {
+    } catch (err) {
       console.error(err);
-      setError(err.message || "Failed to log food entry.");
+      const e = err as { message?: string };
+      setError(e.message || t("log.error_save", "Failed to log food entry."));
     } finally {
       setSaving(false);
     }

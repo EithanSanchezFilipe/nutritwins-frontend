@@ -57,11 +57,13 @@ const dict: Record<string, Record<string, string>> = {
     "log.tab_image": "Visual AI",
     "log.tab_text": "Describe Meal",
     "log.scan_title": "Capture or Upload Food",
-    "log.scan_sub": "Take a picture in the instant or select from your gallery.",
+    "log.scan_sub":
+      "Take a picture in the instant or select from your gallery.",
     "log.take_photo": "Take Photo",
     "log.open_gallery": "Open Gallery",
     "log.text_label": "What did you eat?",
-    "log.text_placeholder": "e.g., A plate of Jollof rice with grilled chicken and fried plantains...",
+    "log.text_placeholder":
+      "e.g., A plate of Jollof rice with grilled chicken and fried plantains...",
     "log.analyze_btn": "Analyze with AI",
     "log.analyzing": "Analyzing ingredients and macros...",
     "log.review_title": "Review AI Analysis",
@@ -82,15 +84,45 @@ const dict: Record<string, Record<string, string>> = {
     "log.meal_lunch": "Lunch",
     "log.meal_dinner": "Dinner",
     "log.meal_snack": "Snack",
+    "log.tab_qr": "Scan",
+    "log.change_photo": "Change Photo",
+    "log.error_invalid_file": "Please select an image file.",
+    "log.error_not_food_image":
+      "The uploaded image does not appear to contain recognizable food.",
+    "log.error_not_food_text":
+      "The description does not appear to describe food.",
+    "log.error_no_details": "No specific details provided.",
+    "log.error_analyze_image": "Failed to analyze image. Please try again.",
+    "log.error_analyze_text":
+      "Failed to analyze text description. Please try again.",
+    "log.qr_unsupported_title": "Scanner not supported",
+    "log.qr_unsupported_body":
+      "Your browser does not support barcode scanning. Use the Photo tab to photograph the product label instead.",
+    "log.qr_title": "Scan a Barcode",
+    "log.qr_sub":
+      "Point your camera at a product barcode or QR code to instantly load nutrition info.",
+    "log.qr_detected": "Detected",
+    "log.qr_loading": "Looking up product...",
+    "log.qr_start": "Start Scanner",
+    "log.qr_stop": "Stop",
+    "log.qr_camera_denied":
+      "Camera access denied. Please allow camera permission and try again.",
+    "log.qr_camera_error": "Could not access camera.",
+    "log.qr_not_found":
+      "No nutrition data found for this barcode. Try the Photo or Text tab instead.",
+    "log.qr_lookup_error": "Failed to look up product. Please try again.",
+    "log.error_save": "Failed to log food entry.",
     // recipes
     "recipes.title": "AI Recipes",
-    "recipes.subtitle": "Chef-crafted recipes fitted to your leftover calories & allergies.",
+    "recipes.subtitle":
+      "Chef-crafted recipes fitted to your leftover calories & allergies.",
     "recipes.ai_auto": "AI Auto",
     "recipes.consulting": "Consulting AI nutritionist...",
     "recipes.calorie_cap_met": "Calorie Cap Met",
     "recipes.remaining_today": "Remaining Today",
     "recipes.target_budget": "Target Budget",
-    "recipes.no_recipes": "No recipes matching criteria. Change filters or log values.",
+    "recipes.no_recipes":
+      "No recipes matching criteria. Change filters or log values.",
     "recipes.reload_suggestions": "Reload Suggestions",
     "recipes.log_recipe_fail": "Failed to log recipe to daily journal.",
     "recipes.view_recipe": "View Recipe",
@@ -101,7 +133,8 @@ const dict: Record<string, Record<string, string>> = {
     "prof.stats_title": "Metabolic Parameters",
     "prof.allergies_title": "Allergies & Intolerances",
     "prof.lang_title": "Language / Langue",
-    "prof.lang_sub": "Choose your preferred language for the application interface and AI suggestions (Recipes & Food Analysis).",
+    "prof.lang_sub":
+      "Choose your preferred language for the application interface and AI suggestions (Recipes & Food Analysis).",
     "prof.edit_btn": "Edit Parameters",
     "prof.save_btn": "Save & Recalculate Calories",
     "prof.male": "Male",
@@ -177,18 +210,21 @@ const dict: Record<string, Record<string, string>> = {
     "dash.loading_journal": "Chargement du journal quotidien...",
     "dash.error_loading_dashboard": "Erreur de chargement du tableau de bord",
     "dash.retry": "Réessayer",
-    "dash.dashboard_fetch_failed": "Échec du chargement des données du tableau de bord.",
+    "dash.dashboard_fetch_failed":
+      "Échec du chargement des données du tableau de bord.",
     // log food
     "log.title": "Enregistrer un repas",
     "log.subtitle": "Analysez votre assiette par photo ou par texte.",
     "log.tab_image": "IA Visuelle",
     "log.tab_text": "Par Description",
     "log.scan_title": "Prendre ou importer une photo",
-    "log.scan_sub": "Prenez une photo à l'instant ou choisissez dans votre galerie.",
+    "log.scan_sub":
+      "Prenez une photo à l'instant ou choisissez dans votre galerie.",
     "log.take_photo": "Prendre photo",
     "log.open_gallery": "Ouvrir Galerie",
     "log.text_label": "Qu'avez-vous mangé ?",
-    "log.text_placeholder": "Ex: Une assiette d'attiéké avec du poisson grillé et des plantains frits...",
+    "log.text_placeholder":
+      "Ex: Une assiette d'attiéké avec du poisson grillé et des plantains frits...",
     "log.analyze_btn": "Analyser avec l'IA",
     "log.analyzing": "Analyse des ingrédients et macros en cours...",
     "log.review_title": "Vérifier l'analyse de l'IA",
@@ -209,17 +245,50 @@ const dict: Record<string, Record<string, string>> = {
     "log.meal_lunch": "Déjeuner",
     "log.meal_dinner": "Dîner",
     "log.meal_snack": "Collation",
+    "log.tab_qr": "Scanner",
+    "log.change_photo": "Changer la photo",
+    "log.error_invalid_file": "Veuillez sélectionner un fichier image.",
+    "log.error_not_food_image":
+      "L'image téléversée ne semble pas contenir d'aliments reconnaissables.",
+    "log.error_not_food_text":
+      "La description ne semble pas décrire un aliment.",
+    "log.error_no_details": "Aucun détail spécifique fourni.",
+    "log.error_analyze_image":
+      "Échec de l'analyse de l'image. Veuillez réessayer.",
+    "log.error_analyze_text":
+      "Échec de l'analyse de la description. Veuillez réessayer.",
+    "log.qr_unsupported_title": "Scanner non pris en charge",
+    "log.qr_unsupported_body":
+      "Votre navigateur ne prend pas en charge le scan de codes-barres. Utilisez l'onglet Photo pour photographier l'étiquette du produit.",
+    "log.qr_title": "Scanner un code-barres",
+    "log.qr_sub":
+      "Pointez votre caméra vers un code-barres ou un QR code pour charger instantanément les infos nutritionnelles.",
+    "log.qr_detected": "Détecté",
+    "log.qr_loading": "Recherche du produit...",
+    "log.qr_start": "Démarrer le scanner",
+    "log.qr_stop": "Arrêter",
+    "log.qr_camera_denied":
+      "Accès à la caméra refusé. Veuillez autoriser la caméra et réessayer.",
+    "log.qr_camera_error": "Impossible d'accéder à la caméra.",
+    "log.qr_not_found":
+      "Aucune donnée nutritionnelle trouvée pour ce code-barres. Essayez l'onglet Photo ou Texte.",
+    "log.qr_lookup_error":
+      "Échec de la recherche du produit. Veuillez réessayer.",
+    "log.error_save": "Échec de l'enregistrement du repas.",
     // recipes
     "recipes.title": "Recettes IA",
-    "recipes.subtitle": "Recettes conçues par un chef en fonction de vos calories restantes et allergies.",
+    "recipes.subtitle":
+      "Recettes conçues par un chef en fonction de vos calories restantes et allergies.",
     "recipes.ai_auto": "IA Auto",
     "recipes.consulting": "Consultation du nutritionniste IA...",
     "recipes.calorie_cap_met": "Seuil calorique atteint",
     "recipes.remaining_today": "Restant aujourd'hui",
     "recipes.target_budget": "Budget cible",
-    "recipes.no_recipes": "Aucune recette correspondante. Changez les filtres ou enregistrez des repas.",
+    "recipes.no_recipes":
+      "Aucune recette correspondante. Changez les filtres ou enregistrez des repas.",
     "recipes.reload_suggestions": "Recharger les suggestions",
-    "recipes.log_recipe_fail": "Échec de l'ajout de la recette au journal quotidien.",
+    "recipes.log_recipe_fail":
+      "Échec de l'ajout de la recette au journal quotidien.",
     "recipes.view_recipe": "Voir la recette",
     "recipes.ai_recipes": "Recettes IA",
     // profile
@@ -228,7 +297,8 @@ const dict: Record<string, Record<string, string>> = {
     "prof.stats_title": "Paramètres métaboliques",
     "prof.allergies_title": "Allergies et Intolérances",
     "prof.lang_title": "Langue / Language",
-    "prof.lang_sub": "Choisissez votre langue préférée pour l'interface de l'application et les suggestions de l'IA (Recettes & Analyse alimentaire).",
+    "prof.lang_sub":
+      "Choisissez votre langue préférée pour l'interface de l'application et les suggestions de l'IA (Recettes & Analyse alimentaire).",
     "prof.edit_btn": "Modifier les paramètres",
     "prof.save_btn": "Enregistrer et Recalculer les Calories",
     "prof.male": "Homme",
@@ -290,7 +360,8 @@ const dict: Record<string, Record<string, string>> = {
     "dash.history_title": "Historial (7 días)",
     "dash.meal_timeline": "Línea del tiempo de comidas de hoy",
     "dash.log_meal_card_title": "Registra lo que comiste",
-    "dash.log_meal_card_sub": "Analiza alimentos con fotos de IA o descripciones",
+    "dash.log_meal_card_sub":
+      "Analiza alimentos con fotos de IA o descripciones",
     "dash.zero_kcal": "0 kcal",
     "dash.over_target": "Exceso de objetivo",
     "dash.kcal_surplus": "kcal de excedente",
@@ -314,7 +385,8 @@ const dict: Record<string, Record<string, string>> = {
     "log.take_photo": "Tomar foto",
     "log.open_gallery": "Abrir galería",
     "log.text_label": "¿Qué comiste?",
-    "log.text_placeholder": "Ej: Un plato de paella con pollo asado y ensalada fresca...",
+    "log.text_placeholder":
+      "Ej: Un plato de paella con pollo asado y ensalada fresca...",
     "log.analyze_btn": "Analizar con IA",
     "log.analyzing": "Analizando ingredientes y macros...",
     "log.review_title": "Revisar análisis de IA",
@@ -335,17 +407,49 @@ const dict: Record<string, Record<string, string>> = {
     "log.meal_lunch": "Almuerzo",
     "log.meal_dinner": "Cena",
     "log.meal_snack": "Merienda",
+    "log.tab_qr": "Escanear",
+    "log.change_photo": "Cambiar foto",
+    "log.error_invalid_file": "Por favor, selecciona un archivo de imagen.",
+    "log.error_not_food_image":
+      "La imagen no parece contener alimentos reconocibles.",
+    "log.error_not_food_text": "La descripción no parece describir comida.",
+    "log.error_no_details": "No se proporcionaron detalles específicos.",
+    "log.error_analyze_image":
+      "Error al analizar la imagen. Por favor, inténtalo de nuevo.",
+    "log.error_analyze_text":
+      "Error al analizar la descripción. Por favor, inténtalo de nuevo.",
+    "log.qr_unsupported_title": "Escáner no compatible",
+    "log.qr_unsupported_body":
+      "Tu navegador no es compatible con el escaneo de códigos de barras. Usa la pestaña Foto para fotografiar la etiqueta del producto.",
+    "log.qr_title": "Escanear un código de barras",
+    "log.qr_sub":
+      "Apunta tu cámara a un código de barras o QR para cargar la información nutricional al instante.",
+    "log.qr_detected": "Detectado",
+    "log.qr_loading": "Buscando producto...",
+    "log.qr_start": "Iniciar escáner",
+    "log.qr_stop": "Detener",
+    "log.qr_camera_denied":
+      "Acceso a la cámara denegado. Por favor, permite el acceso y vuelve a intentarlo.",
+    "log.qr_camera_error": "No se puede acceder a la cámara.",
+    "log.qr_not_found":
+      "No se encontraron datos nutricionales para este código de barras. Prueba la pestaña Foto o Texto.",
+    "log.qr_lookup_error":
+      "Error al buscar el producto. Por favor, inténtalo de nuevo.",
+    "log.error_save": "Error al guardar la entrada de comida.",
     // recipes
     "recipes.title": "Recetas IA",
-    "recipes.subtitle": "Recetas creadas por un chef según tus calorías restantes y alergias.",
+    "recipes.subtitle":
+      "Recetas creadas por un chef según tus calorías restantes y alergias.",
     "recipes.ai_auto": "IA Automática",
     "recipes.consulting": "Consultando al nutricionista IA...",
     "recipes.calorie_cap_met": "Límite de calorías alcanzado",
     "recipes.remaining_today": "Restante hoy",
     "recipes.target_budget": "Presupuesto objetivo",
-    "recipes.no_recipes": "No hay recetas que coincidan. Cambia los filtros o registra valores.",
+    "recipes.no_recipes":
+      "No hay recetas que coincidan. Cambia los filtros o registra valores.",
     "recipes.reload_suggestions": "Recargar sugerencias",
-    "recipes.log_recipe_fail": "No se pudo registrar la receta en el diario diario.",
+    "recipes.log_recipe_fail":
+      "No se pudo registrar la receta en el diario diario.",
     "recipes.view_recipe": "Ver receta",
     "recipes.ai_recipes": "Recetas IA",
     // profile
@@ -354,7 +458,8 @@ const dict: Record<string, Record<string, string>> = {
     "prof.stats_title": "Parámetros metabólicos",
     "prof.allergies_title": "Alergias e intolerancias",
     "prof.lang_title": "Idioma",
-    "prof.lang_sub": "Elige tu idioma preferido para la interfaz y las sugerencias de IA (Recetas y Análisis de alimentos).",
+    "prof.lang_sub":
+      "Elige tu idioma preferido para la interfaz y las sugerencias de IA (Recetas y Análisis de alimentos).",
     "prof.edit_btn": "Editar parámetros",
     "prof.save_btn": "Guardar y recalcular calorías",
     "prof.male": "Hombre",
@@ -385,5 +490,5 @@ const dict: Record<string, Record<string, string>> = {
     "prof.allergy_placeholder": "Añadir intolerancia...",
     "prof.allergy_add_btn": "Añadir",
     "prof.allergy_active": "Filtros de alergias activos",
-  }
+  },
 };

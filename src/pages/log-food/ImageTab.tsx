@@ -50,7 +50,10 @@ export const ImageTab: React.FC<ImageTabProps> = ({
 
   const handleImageSelection = (file: File) => {
     if (!file.type.startsWith("image/")) {
-      onError("Please select an image file.", false);
+      onError(
+        t("log.error_invalid_file", "Please select an image file."),
+        false,
+      );
       return;
     }
     onClearError();
@@ -71,8 +74,13 @@ export const ImageTab: React.FC<ImageTabProps> = ({
       const res = await api.analyzeImage(selectedFile);
       if (!res.isFood) {
         onError(
-          "The uploaded image does not appear to contain recognizable food. Details: " +
-            (res.error || "No specific details provided."),
+          t(
+            "log.error_not_food_image",
+            "The uploaded image does not appear to contain recognizable food.",
+          ) +
+            " " +
+            t("log.error_no_details", "No specific details provided.") +
+            (res.error ? " " + res.error : ""),
           true,
         );
       } else {
@@ -81,7 +89,11 @@ export const ImageTab: React.FC<ImageTabProps> = ({
     } catch (err: any) {
       console.error(err);
       onError(
-        err.message || "Failed to analyze image. Please try again.",
+        err.message ||
+          t(
+            "log.error_analyze_image",
+            "Failed to analyze image. Please try again.",
+          ),
         err.status === 422,
       );
     } finally {
@@ -175,7 +187,7 @@ export const ImageTab: React.FC<ImageTabProps> = ({
               }}
               className="absolute top-3 right-3 bg-gray-950/80 backdrop-blur-md text-gray-300 hover:text-white p-2 rounded-xl border border-gray-800 transition-all text-xs font-semibold"
             >
-              Change Photo
+              {t("log.change_photo", "Change Photo")}
             </button>
           </div>
 

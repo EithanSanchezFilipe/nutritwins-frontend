@@ -69,8 +69,12 @@ export const QrScanTab: React.FC<QrScanTabProps> = ({
     } catch (err: any) {
       setCameraError(
         err.name === "NotAllowedError"
-          ? "Camera access denied. Please allow camera permission and try again."
-          : "Could not access camera. " + (err.message ?? ""),
+          ? t(
+              "log.qr_camera_denied",
+              "Camera access denied. Please allow camera permission and try again.",
+            )
+          : t("log.qr_camera_error", "Could not access camera.") +
+              (err.message ? " " + err.message : ""),
       );
     }
   };
@@ -121,7 +125,10 @@ export const QrScanTab: React.FC<QrScanTabProps> = ({
 
       if (data.status !== 1 || !data.product) {
         onError(
-          `No nutrition data found for barcode ${barcode}. Try the Photo or Text tab instead.`,
+          t(
+            "log.qr_not_found",
+            "No nutrition data found for this barcode. Try the Photo or Text tab instead.",
+          ),
           false,
         );
         return;
@@ -150,7 +157,11 @@ export const QrScanTab: React.FC<QrScanTabProps> = ({
       onAnalysisComplete(analysisResult);
     } catch (err: any) {
       onError(
-        err.message || "Failed to look up product. Please try again.",
+        err.message ||
+          t(
+            "log.qr_lookup_error",
+            "Failed to look up product. Please try again.",
+          ),
         false,
       );
     } finally {
@@ -202,7 +213,7 @@ export const QrScanTab: React.FC<QrScanTabProps> = ({
               onClick={stopCamera}
               className="absolute top-3 right-3 bg-gray-950/80 backdrop-blur-md text-gray-300 hover:text-white p-2 rounded-xl border border-gray-800 transition-all text-xs font-semibold"
             >
-              Stop
+              {t("log.qr_stop", "Stop")}
             </button>
           </>
         ) : (

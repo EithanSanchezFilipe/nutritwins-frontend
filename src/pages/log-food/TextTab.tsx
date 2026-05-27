@@ -27,8 +27,13 @@ export const TextTab: React.FC<TextTabProps> = ({
       const res = await api.analyzeText(description);
       if (!res.isFood) {
         onError(
-          "The description does not appear to describe food. Details: " +
-            (res.error || "No specific details provided."),
+          t(
+            "log.error_not_food_text",
+            "The description does not appear to describe food.",
+          ) +
+            " " +
+            t("log.error_no_details", "No specific details provided.") +
+            (res.error ? " " + res.error : ""),
           true,
         );
       } else {
@@ -38,7 +43,11 @@ export const TextTab: React.FC<TextTabProps> = ({
       console.error(err);
       const e = err as { message?: string; status?: number };
       onError(
-        e.message || "Failed to analyze text description. Please try again.",
+        e.message ||
+          t(
+            "log.error_analyze_text",
+            "Failed to analyze text description. Please try again.",
+          ),
         e.status === 422,
       );
     } finally {
