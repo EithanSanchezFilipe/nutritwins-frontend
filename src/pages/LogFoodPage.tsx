@@ -1,38 +1,56 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import {
   Camera,
   FileText,
-  Upload,
-  Sparkles,
+  ScanLine,
   AlertTriangle,
   CheckCircle2,
   ChevronRight,
   Edit2,
   RotateCcw,
 } from "lucide-react";
-import { api } from "../lib/api";
 import type { FoodAnalysisResponse, MealType } from "../lib/api";
+import { api } from "../lib/api";
 import GlassCard from "../components/GlassCard";
 import { t } from "../lib/i18n";
+import { ImageTab } from "./log-food/ImageTab";
+import { TextTab } from "./log-food/TextTab";
+import { QrScanTab } from "./log-food/QrScanTab";
+
+type TabId = "image" | "text" | "qr";
+
+interface Tab {
+  id: TabId;
+  label: string;
+  icon: React.ReactNode;
+}
+
+const TABS: Tab[] = [
+  {
+    id: "image",
+    label: "Photo",
+    icon: <Camera className="w-4 h-4" />,
+  },
+  {
+    id: "text",
+    label: "Text",
+    icon: <FileText className="w-4 h-4" />,
+  },
+  {
+    id: "qr",
+    label: "Scan",
+    icon: <ScanLine className="w-4 h-4" />,
+  },
+];
 
 interface LogFoodPageProps {
   onSuccess: () => void;
 }
 
 export const LogFoodPage: React.FC<LogFoodPageProps> = ({ onSuccess }) => {
-  const [activeTab, setActiveTab] = useState<"image" | "text">("image");
-  const [loading, setLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState<TabId>("image");
   const [error, setError] = useState<string | null>(null);
   const [isNotFoodError, setIsNotFoodError] = useState<boolean>(false);
-
-  // Text state
-  const [description, setDescription] = useState("");
-
-  // Image state
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const cameraInputRef = useRef<HTMLInputElement>(null);
 
   // Review states
   const [analysisResult, setAnalysisResult] =
@@ -45,127 +63,11 @@ export const LogFoodPage: React.FC<LogFoodPageProps> = ({ onSuccess }) => {
   const [fat, setFat] = useState<number>(0);
   const [saving, setSaving] = useState(false);
 
-  // Drag and Drop State
-  const [dragActive, setDragActive] = useState(false);
-
   const resetState = () => {
-    setLoading(false);
     setError(null);
     setIsNotFoodError(false);
-    setSelectedFile(null);
-    setImagePreview(null);
-    setDescription("");
     setAnalysisResult(null);
     setDishName("");
-  };
-
-  const handleDrag = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (e.type === "dragenter" || e.type === "dragover") {
-      setDragActive(true);
-    } else if (e.type === "dragleave") {
-      setDragActive(false);
-    }
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
-
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      const file = e.dataTransfer.files[0];
-      handleImageSelection(file);
-    }
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      handleImageSelection(e.target.files[0]);
-    }
-  };
-
-  const handleImageSelection = (file: File) => {
-    if (!file.type.startsWith("image/")) {
-      setError("Please select an image file.");
-      return;
-    }
-    setError(null);
-    setSelectedFile(file);
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setImagePreview(reader.result as string);
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const triggerFileSelect = () => {
-    fileInputRef.current?.click();
-  };
-
-  const triggerCameraSelect = () => {
-    cameraInputRef.current?.click();
-  };
-
-  const handleAnalyzeImage = async () => {
-    if (!selectedFile) return;
-    setLoading(true);
-    setError(null);
-    setIsNotFoodError(false);
-
-    try {
-      const res = await api.analyzeImage(selectedFile);
-
-      if (!res.isFood) {
-        setIsNotFoodError(true);
-        setError(
-          "The uploaded image does not appear to contain recognizable food. Details: " +
-            (res.error || "No specific details provided."),
-        );
-      } else {
-        setupReviewForm(res);
-      }
-    } catch (err: any) {
-      console.error(err);
-      if (err.status === 422) {
-        setIsNotFoodError(true);
-      }
-      setError(err.message || "Failed to analyze image. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleAnalyzeText = async () => {
-    if (!description.trim()) return;
-    setLoading(true);
-    setError(null);
-    setIsNotFoodError(false);
-
-    try {
-      const res = await api.analyzeText(description);
-
-      if (!res.isFood) {
-        setIsNotFoodError(true);
-        setError(
-          "The description does not appear to describe food. Details: " +
-            (res.error || "No specific details provided."),
-        );
-      } else {
-        setupReviewForm(res);
-      }
-    } catch (err: any) {
-      console.error(err);
-      if (err.status === 422) {
-        setIsNotFoodError(true);
-      }
-      setError(
-        err.message || "Failed to analyze text description. Please try again.",
-      );
-    } finally {
-      setLoading(false);
-    }
   };
 
   const setupReviewForm = (res: FoodAnalysisResponse) => {
@@ -221,35 +123,26 @@ export const LogFoodPage: React.FC<LogFoodPageProps> = ({ onSuccess }) => {
       {/* If we don't have results yet, show input options */}
       {!analysisResult ? (
         <div className="space-y-4">
-          <div className="flex border-b border-gray-800 pb-2 mb-2">
-            <button
-              onClick={() => {
-                setActiveTab("image");
-                setError(null);
-              }}
-              className={`flex-1 text-center py-2 text-xs font-semibold rounded-lg transition-all duration-300 flex items-center justify-center gap-2 ${
-                activeTab === "image"
-                  ? "text-teal-400 bg-teal-500/5 border border-teal-500/20"
-                  : "text-gray-400 hover:text-gray-250 border border-transparent"
-              }`}
-            >
-              <Camera className="w-4 h-4" />
-              {t("log.tab_image", "Photo Analysis")}
-            </button>
-            <button
-              onClick={() => {
-                setActiveTab("text");
-                setError(null);
-              }}
-              className={`flex-1 text-center py-2 text-xs font-semibold rounded-lg transition-all duration-300 flex items-center justify-center gap-2 ${
-                activeTab === "text"
-                  ? "text-teal-400 bg-teal-500/5 border border-teal-500/20"
-                  : "text-gray-400 hover:text-gray-250 border border-transparent"
-              }`}
-            >
-              <FileText className="w-4 h-4" />
-              {t("log.tab_text", "Text Input")}
-            </button>
+          {/* Tab bar — add new tabs to TABS array in the TabId union above */}
+          <div className="flex border-b border-gray-800 pb-2 mb-2 gap-1">
+            {TABS.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => {
+                  setActiveTab(tab.id);
+                  setError(null);
+                  setIsNotFoodError(false);
+                }}
+                className={`flex-1 text-center py-2 text-xs font-semibold rounded-lg transition-all duration-300 flex items-center justify-center gap-2 ${
+                  activeTab === tab.id
+                    ? "text-teal-400 bg-teal-500/5 border border-teal-500/20"
+                    : "text-gray-400 hover:text-gray-250 border border-transparent"
+                }`}
+              >
+                {tab.icon}
+                {tab.label}
+              </button>
+            ))}
           </div>
 
           {error && (
@@ -272,171 +165,46 @@ export const LogFoodPage: React.FC<LogFoodPageProps> = ({ onSuccess }) => {
             </div>
           )}
 
-          {/* TAB 1: IMAGE ANALYZER */}
           {activeTab === "image" && (
-            <div className="space-y-4">
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                className="hidden"
-                id="food-image-upload"
-              />
-              <input
-                ref={cameraInputRef}
-                type="file"
-                accept="image/*"
-                capture="environment"
-                onChange={handleFileChange}
-                className="hidden"
-                id="food-camera-capture"
-              />
-
-              {!imagePreview ? (
-                <div
-                  onDragEnter={handleDrag}
-                  onDragOver={handleDrag}
-                  onDragLeave={handleDrag}
-                  onDrop={handleDrop}
-                  className={`border-2 border-dashed rounded-2xl p-8 flex flex-col items-center justify-center text-center transition-all duration-300 ${
-                    dragActive
-                      ? "border-teal-500 bg-teal-500/5"
-                      : "border-gray-800 bg-gray-900/10 hover:border-gray-700/60"
-                  }`}
-                >
-                  <div className="bg-teal-500/10 p-4 rounded-full border border-teal-500/20 mb-4 text-teal-400">
-                    <Camera className="w-6 h-6 animate-pulse" />
-                  </div>
-                  <h4 className="text-sm font-semibold text-white mb-1">
-                    {t("log.scan_title", "Capture or Upload Food")}
-                  </h4>
-                  <p className="text-xs text-gray-500 max-w-[200px] mb-5">
-                    {t(
-                      "log.scan_sub",
-                      "Take a picture in the instant or select from your gallery.",
-                    )}
-                  </p>
-
-                  <div className="flex flex-col gap-2.5 w-full max-w-xs">
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        triggerCameraSelect();
-                      }}
-                      className="w-full text-xs bg-teal-500 hover:bg-teal-400 text-white font-bold py-2.5 px-4 rounded-xl shadow-md transition-all flex items-center justify-center gap-1.5 active:scale-[0.98]"
-                    >
-                      <Camera className="w-4 h-4" />
-                      {t("log.take_photo", "Take Photo")}
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        triggerFileSelect();
-                      }}
-                      className="w-full text-xs bg-gray-900 hover:bg-gray-850 border border-gray-800 hover:border-gray-700 text-gray-300 font-semibold py-2.5 px-4 rounded-xl transition-all flex items-center justify-center gap-1.5 active:scale-[0.98]"
-                    >
-                      <Upload className="w-4 h-4" />
-                      {t("log.open_gallery", "Open Gallery")}
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  <div className="relative rounded-2xl overflow-hidden border border-gray-850 h-56 bg-gray-900 flex items-center justify-center">
-                    <img
-                      src={imagePreview}
-                      alt="Preview"
-                      className="h-full w-full object-cover"
-                    />
-                    <button
-                      onClick={() => {
-                        setImagePreview(null);
-                        setSelectedFile(null);
-                      }}
-                      className="absolute top-3 right-3 bg-gray-950/80 backdrop-blur-md text-gray-300 hover:text-white p-2 rounded-xl border border-gray-800 transition-all text-xs font-semibold"
-                    >
-                      Change Photo
-                    </button>
-                  </div>
-
-                  <button
-                    onClick={handleAnalyzeImage}
-                    disabled={loading}
-                    style={{ color: "#ffffff" }}
-                    className="w-full bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-400 hover:to-teal-500 text-white rounded-xl py-3.5 text-sm font-bold shadow-lg shadow-teal-950/20 flex items-center justify-center gap-2 transition-all duration-200"
-                  >
-                    {loading ? (
-                      <>
-                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                        <span>
-                          {t(
-                            "log.analyzing",
-                            "AI Food Recognition Analyzing...",
-                          )}
-                        </span>
-                      </>
-                    ) : (
-                      <>
-                        <Sparkles className="w-4 h-4 fill-white/10" />
-                        <span>
-                          {t("log.analyze_btn", "Analyze Dish Photo")}
-                        </span>
-                      </>
-                    )}
-                  </button>
-                </div>
-              )}
-            </div>
+            <ImageTab
+              onAnalysisComplete={setupReviewForm}
+              onError={(msg, isNotFood) => {
+                setError(msg);
+                setIsNotFoodError(isNotFood);
+              }}
+              onClearError={() => {
+                setError(null);
+                setIsNotFoodError(false);
+              }}
+            />
           )}
 
-          {/* TAB 2: TEXT ANALYZER */}
           {activeTab === "text" && (
-            <div className="space-y-4">
-              <div className="space-y-1">
-                <label
-                  htmlFor="food-desc"
-                  className="text-xs font-medium text-gray-400 uppercase tracking-wider"
-                >
-                  {t("log.text_label", "What did you eat?")}
-                </label>
-                <textarea
-                  id="food-desc"
-                  rows={4}
-                  placeholder={t(
-                    "log.text_placeholder",
-                    "Example: I ate a bowl of chicken noodle soup, a side garden salad with olive oil dressing, and a small red apple.",
-                  )}
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  className="w-full bg-gray-900/40 border border-gray-800 focus:border-teal-500/50 rounded-xl p-4 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-teal-500/20 transition-all resize-none"
-                />
-              </div>
+            <TextTab
+              onAnalysisComplete={setupReviewForm}
+              onError={(msg, isNotFood) => {
+                setError(msg);
+                setIsNotFoodError(isNotFood);
+              }}
+              onClearError={() => {
+                setError(null);
+                setIsNotFoodError(false);
+              }}
+            />
+          )}
 
-              <button
-                onClick={handleAnalyzeText}
-                disabled={loading || !description.trim()}
-                style={{ color: "white" }}
-                className="w-full bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-400 hover:to-teal-500 text-white rounded-xl py-3.5 text-sm font-bold shadow-lg shadow-teal-950/20 flex items-center justify-center gap-2 transition-all duration-200 disabled:opacity-50"
-              >
-                {loading ? (
-                  <>
-                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    <span>
-                      {t("log.analyzing", "AI Language Model Analyzing...")}
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    <Sparkles className="w-4 h-4 fill-white/10" />
-                    <span>{t("log.analyze_btn", "Analyze Description")}</span>
-                  </>
-                )}
-              </button>
-            </div>
+          {activeTab === "qr" && (
+            <QrScanTab
+              onAnalysisComplete={setupReviewForm}
+              onError={(msg, isNotFood) => {
+                setError(msg);
+                setIsNotFoodError(isNotFood);
+              }}
+              onClearError={() => {
+                setError(null);
+                setIsNotFoodError(false);
+              }}
+            />
           )}
         </div>
       ) : (
