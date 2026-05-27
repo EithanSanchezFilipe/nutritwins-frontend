@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { ScanLine, Flashlight, AlertTriangle } from "lucide-react";
-import { api } from "../../lib/api";
+import { ScanLine, AlertTriangle } from "lucide-react";
 import type { FoodAnalysisResponse } from "../../lib/api";
 import { t } from "../../lib/i18n";
 
