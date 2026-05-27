@@ -9,6 +9,7 @@ import DashboardPage from "./pages/DashboardPage";
 import LogFoodPage from "./pages/LogFoodPage";
 import RecipesPage from "./pages/RecipesPage";
 import ProfilePage from "./pages/ProfilePage";
+import ScanRecipePage from "./pages/ScanRecipePage";
 
 export function App() {
   const { data: session, isPending: sessionPending } = authClient.useSession();
@@ -124,7 +125,19 @@ export function App() {
           />
         );
       case "log":
-        return <LogFoodPage onSuccess={handleLogFoodSuccess} />;
+        return (
+          <LogFoodPage
+            onSuccess={handleLogFoodSuccess}
+            onNavigateToScanRecipe={() => setActiveTab("scan-recipe")}
+          />
+        );
+      case "scan-recipe":
+        return (
+          <ScanRecipePage
+            onBack={() => setActiveTab("log")}
+            onSuccess={handleLogFoodSuccess}
+          />
+        );
       case "recipes":
         return <RecipesPage onLogSuccess={handleLogFoodSuccess} />;
       case "profile":

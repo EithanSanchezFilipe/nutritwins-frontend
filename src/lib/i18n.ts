@@ -112,8 +112,21 @@ const dict: Record<string, Record<string, string>> = {
       "No nutrition data found for this barcode. Try the Photo or Text tab instead.",
     "log.qr_lookup_error": "Failed to look up product. Please try again.",
     "log.error_save": "Failed to log food entry.",
+    "log.qr_scan_again": "Scan Again",
+    "log.qr_add_journal": "Add to Journal",
+    "log.qr_open_recipe_scanner": "Scan Multiple Items → Recipe Builder",
+    "recipe.scanner_title": "Recipe Builder",
+    "recipe.scanner_sub": "Scan each product to add it to your meal.",
+    "recipe.scanner_hint_first": "Scan your first product",
+    "recipe.scanner_hint_next": "Scan next product",
+    "recipe.scanner_scan_more": "Scan Another",
+    "recipe.scanner_empty": "No items yet — start scanning to build your meal.",
+    "recipe.total": "Total",
+    "recipe.items": "items",
+    "recipe.scanned_items": "Scanned Items",
+    "recipe.clear_all": "Clear All",
+    "recipe.scanned_meal_name": "Scanned Meal",
     // recipes
-    "recipes.title": "AI Recipes",
     "recipes.subtitle":
       "Chef-crafted recipes fitted to your leftover calories & allergies.",
     "recipes.ai_auto": "AI Auto",
@@ -275,6 +288,23 @@ const dict: Record<string, Record<string, string>> = {
     "log.qr_lookup_error":
       "Échec de la recherche du produit. Veuillez réessayer.",
     "log.error_save": "Échec de l'enregistrement du repas.",
+    "log.qr_scan_again": "Rescanner",
+    "log.qr_add_journal": "Ajouter au journal",
+    "log.qr_open_recipe_scanner":
+      "Scanner plusieurs produits → Créer une recette",
+    "recipe.scanner_title": "Créateur de recette",
+    "recipe.scanner_sub":
+      "Scannez chaque produit pour l'ajouter à votre repas.",
+    "recipe.scanner_hint_first": "Scannez votre premier produit",
+    "recipe.scanner_hint_next": "Scannez le produit suivant",
+    "recipe.scanner_scan_more": "Scanner un autre",
+    "recipe.scanner_empty":
+      "Aucun produit encore — commencez à scanner pour créer votre repas.",
+    "recipe.total": "Total",
+    "recipe.items": "articles",
+    "recipe.scanned_items": "Produits scannés",
+    "recipe.clear_all": "Tout effacer",
+    "recipe.scanned_meal_name": "Repas scanné",
     // recipes
     "recipes.title": "Recettes IA",
     "recipes.subtitle":
@@ -436,6 +466,21 @@ const dict: Record<string, Record<string, string>> = {
     "log.qr_lookup_error":
       "Error al buscar el producto. Por favor, inténtalo de nuevo.",
     "log.error_save": "Error al guardar la entrada de comida.",
+    "log.qr_scan_again": "Escanear de nuevo",
+    "log.qr_add_journal": "Añadir al diario",
+    "log.qr_open_recipe_scanner": "Escanear varios productos → Crear receta",
+    "recipe.scanner_title": "Creador de recetas",
+    "recipe.scanner_sub": "Escanea cada producto para añadirlo a tu comida.",
+    "recipe.scanner_hint_first": "Escanea tu primer producto",
+    "recipe.scanner_hint_next": "Escanea el siguiente producto",
+    "recipe.scanner_scan_more": "Escanear otro",
+    "recipe.scanner_empty":
+      "Sin productos aún — empieza a escanear para crear tu comida.",
+    "recipe.total": "Total",
+    "recipe.items": "artículos",
+    "recipe.scanned_items": "Productos escaneados",
+    "recipe.clear_all": "Borrar todo",
+    "recipe.scanned_meal_name": "Comida escaneada",
     // recipes
     "recipes.title": "Recetas IA",
     "recipes.subtitle":

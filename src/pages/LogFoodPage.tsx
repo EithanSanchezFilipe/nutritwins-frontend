@@ -27,9 +27,13 @@ interface Tab {
 
 interface LogFoodPageProps {
   onSuccess: () => void;
+  onNavigateToScanRecipe: () => void;
 }
 
-export const LogFoodPage: React.FC<LogFoodPageProps> = ({ onSuccess }) => {
+export const LogFoodPage: React.FC<LogFoodPageProps> = ({
+  onSuccess,
+  onNavigateToScanRecipe,
+}) => {
   const [activeTab, setActiveTab] = useState<TabId>("image");
 
   const TABS: Tab[] = [
@@ -205,6 +209,7 @@ export const LogFoodPage: React.FC<LogFoodPageProps> = ({ onSuccess }) => {
                 setError(null);
                 setIsNotFoodError(false);
               }}
+              onOpenRecipeScanner={onNavigateToScanRecipe}
             />
           )}
         </div>
