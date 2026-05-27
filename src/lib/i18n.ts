@@ -84,7 +84,6 @@ const dict: Record<string, Record<string, string>> = {
     "log.meal_lunch": "Lunch",
     "log.meal_dinner": "Dinner",
     "log.meal_snack": "Snack",
-    "log.tab_qr": "Scan",
     "log.change_photo": "Change Photo",
     "log.error_invalid_file": "Please select an image file.",
     "log.error_not_food_image":
@@ -95,37 +94,7 @@ const dict: Record<string, Record<string, string>> = {
     "log.error_analyze_image": "Failed to analyze image. Please try again.",
     "log.error_analyze_text":
       "Failed to analyze text description. Please try again.",
-    "log.qr_unsupported_title": "Scanner not supported",
-    "log.qr_unsupported_body":
-      "Your browser does not support barcode scanning. Use the Photo tab to photograph the product label instead.",
-    "log.qr_title": "Scan a Barcode",
-    "log.qr_sub":
-      "Point your camera at a product barcode or QR code to instantly load nutrition info.",
-    "log.qr_detected": "Detected",
-    "log.qr_loading": "Looking up product...",
-    "log.qr_start": "Start Scanner",
-    "log.qr_stop": "Stop",
-    "log.qr_camera_denied":
-      "Camera access denied. Please allow camera permission and try again.",
-    "log.qr_camera_error": "Could not access camera.",
-    "log.qr_not_found":
-      "No nutrition data found for this barcode. Try the Photo or Text tab instead.",
-    "log.qr_lookup_error": "Failed to look up product. Please try again.",
     "log.error_save": "Failed to log food entry.",
-    "log.qr_scan_again": "Scan Again",
-    "log.qr_add_journal": "Add to Journal",
-    "log.qr_open_recipe_scanner": "Scan Multiple Items → Recipe Builder",
-    "recipe.scanner_title": "Recipe Builder",
-    "recipe.scanner_sub": "Scan each product to add it to your meal.",
-    "recipe.scanner_hint_first": "Scan your first product",
-    "recipe.scanner_hint_next": "Scan next product",
-    "recipe.scanner_scan_more": "Scan Another",
-    "recipe.scanner_empty": "No items yet — start scanning to build your meal.",
-    "recipe.total": "Total",
-    "recipe.items": "items",
-    "recipe.scanned_items": "Scanned Items",
-    "recipe.clear_all": "Clear All",
-    "recipe.scanned_meal_name": "Scanned Meal",
     // recipes
     "recipes.subtitle":
       "Chef-crafted recipes fitted to your leftover calories & allergies.",
@@ -258,7 +227,6 @@ const dict: Record<string, Record<string, string>> = {
     "log.meal_lunch": "Déjeuner",
     "log.meal_dinner": "Dîner",
     "log.meal_snack": "Collation",
-    "log.tab_qr": "Scanner",
     "log.change_photo": "Changer la photo",
     "log.error_invalid_file": "Veuillez sélectionner un fichier image.",
     "log.error_not_food_image":
@@ -270,41 +238,7 @@ const dict: Record<string, Record<string, string>> = {
       "Échec de l'analyse de l'image. Veuillez réessayer.",
     "log.error_analyze_text":
       "Échec de l'analyse de la description. Veuillez réessayer.",
-    "log.qr_unsupported_title": "Scanner non pris en charge",
-    "log.qr_unsupported_body":
-      "Votre navigateur ne prend pas en charge le scan de codes-barres. Utilisez l'onglet Photo pour photographier l'étiquette du produit.",
-    "log.qr_title": "Scanner un code-barres",
-    "log.qr_sub":
-      "Pointez votre caméra vers un code-barres ou un QR code pour charger instantanément les infos nutritionnelles.",
-    "log.qr_detected": "Détecté",
-    "log.qr_loading": "Recherche du produit...",
-    "log.qr_start": "Démarrer le scanner",
-    "log.qr_stop": "Arrêter",
-    "log.qr_camera_denied":
-      "Accès à la caméra refusé. Veuillez autoriser la caméra et réessayer.",
-    "log.qr_camera_error": "Impossible d'accéder à la caméra.",
-    "log.qr_not_found":
-      "Aucune donnée nutritionnelle trouvée pour ce code-barres. Essayez l'onglet Photo ou Texte.",
-    "log.qr_lookup_error":
-      "Échec de la recherche du produit. Veuillez réessayer.",
     "log.error_save": "Échec de l'enregistrement du repas.",
-    "log.qr_scan_again": "Rescanner",
-    "log.qr_add_journal": "Ajouter au journal",
-    "log.qr_open_recipe_scanner":
-      "Scanner plusieurs produits → Créer une recette",
-    "recipe.scanner_title": "Créateur de recette",
-    "recipe.scanner_sub":
-      "Scannez chaque produit pour l'ajouter à votre repas.",
-    "recipe.scanner_hint_first": "Scannez votre premier produit",
-    "recipe.scanner_hint_next": "Scannez le produit suivant",
-    "recipe.scanner_scan_more": "Scanner un autre",
-    "recipe.scanner_empty":
-      "Aucun produit encore — commencez à scanner pour créer votre repas.",
-    "recipe.total": "Total",
-    "recipe.items": "articles",
-    "recipe.scanned_items": "Produits scannés",
-    "recipe.clear_all": "Tout effacer",
-    "recipe.scanned_meal_name": "Repas scanné",
     // recipes
     "recipes.title": "Recettes IA",
     "recipes.subtitle":
@@ -437,7 +371,6 @@ const dict: Record<string, Record<string, string>> = {
     "log.meal_lunch": "Almuerzo",
     "log.meal_dinner": "Cena",
     "log.meal_snack": "Merienda",
-    "log.tab_qr": "Escanear",
     "log.change_photo": "Cambiar foto",
     "log.error_invalid_file": "Por favor, selecciona un archivo de imagen.",
     "log.error_not_food_image":
@@ -448,39 +381,7 @@ const dict: Record<string, Record<string, string>> = {
       "Error al analizar la imagen. Por favor, inténtalo de nuevo.",
     "log.error_analyze_text":
       "Error al analizar la descripción. Por favor, inténtalo de nuevo.",
-    "log.qr_unsupported_title": "Escáner no compatible",
-    "log.qr_unsupported_body":
-      "Tu navegador no es compatible con el escaneo de códigos de barras. Usa la pestaña Foto para fotografiar la etiqueta del producto.",
-    "log.qr_title": "Escanear un código de barras",
-    "log.qr_sub":
-      "Apunta tu cámara a un código de barras o QR para cargar la información nutricional al instante.",
-    "log.qr_detected": "Detectado",
-    "log.qr_loading": "Buscando producto...",
-    "log.qr_start": "Iniciar escáner",
-    "log.qr_stop": "Detener",
-    "log.qr_camera_denied":
-      "Acceso a la cámara denegado. Por favor, permite el acceso y vuelve a intentarlo.",
-    "log.qr_camera_error": "No se puede acceder a la cámara.",
-    "log.qr_not_found":
-      "No se encontraron datos nutricionales para este código de barras. Prueba la pestaña Foto o Texto.",
-    "log.qr_lookup_error":
-      "Error al buscar el producto. Por favor, inténtalo de nuevo.",
     "log.error_save": "Error al guardar la entrada de comida.",
-    "log.qr_scan_again": "Escanear de nuevo",
-    "log.qr_add_journal": "Añadir al diario",
-    "log.qr_open_recipe_scanner": "Escanear varios productos → Crear receta",
-    "recipe.scanner_title": "Creador de recetas",
-    "recipe.scanner_sub": "Escanea cada producto para añadirlo a tu comida.",
-    "recipe.scanner_hint_first": "Escanea tu primer producto",
-    "recipe.scanner_hint_next": "Escanea el siguiente producto",
-    "recipe.scanner_scan_more": "Escanear otro",
-    "recipe.scanner_empty":
-      "Sin productos aún — empieza a escanear para crear tu comida.",
-    "recipe.total": "Total",
-    "recipe.items": "artículos",
-    "recipe.scanned_items": "Productos escaneados",
-    "recipe.clear_all": "Borrar todo",
-    "recipe.scanned_meal_name": "Comida escaneada",
     // recipes
     "recipes.title": "Recetas IA",
     "recipes.subtitle":

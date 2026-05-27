@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import {
   Camera,
   FileText,
-  ScanLine,
   AlertTriangle,
   CheckCircle2,
   ChevronRight,
@@ -15,9 +14,7 @@ import GlassCard from "../components/GlassCard";
 import { t } from "../lib/i18n";
 import { ImageTab } from "./log-food/ImageTab";
 import { TextTab } from "./log-food/TextTab";
-import { QrScanTab } from "./log-food/QrScanTab";
-
-type TabId = "image" | "text" | "qr";
+type TabId = "image" | "text";
 
 interface Tab {
   id: TabId;
@@ -27,13 +24,9 @@ interface Tab {
 
 interface LogFoodPageProps {
   onSuccess: () => void;
-  onNavigateToScanRecipe: () => void;
 }
 
-export const LogFoodPage: React.FC<LogFoodPageProps> = ({
-  onSuccess,
-  onNavigateToScanRecipe,
-}) => {
+export const LogFoodPage: React.FC<LogFoodPageProps> = ({ onSuccess }) => {
   const [activeTab, setActiveTab] = useState<TabId>("image");
 
   const TABS: Tab[] = [
@@ -46,11 +39,6 @@ export const LogFoodPage: React.FC<LogFoodPageProps> = ({
       id: "text",
       label: t("log.tab_text", "Text"),
       icon: <FileText className="w-4 h-4" />,
-    },
-    {
-      id: "qr",
-      label: t("log.tab_qr", "Scan"),
-      icon: <ScanLine className="w-4 h-4" />,
     },
   ];
   const [error, setError] = useState<string | null>(null);
@@ -195,21 +183,6 @@ export const LogFoodPage: React.FC<LogFoodPageProps> = ({
                 setError(null);
                 setIsNotFoodError(false);
               }}
-            />
-          )}
-
-          {activeTab === "qr" && (
-            <QrScanTab
-              onAnalysisComplete={setupReviewForm}
-              onError={(msg, isNotFood) => {
-                setError(msg);
-                setIsNotFoodError(isNotFood);
-              }}
-              onClearError={() => {
-                setError(null);
-                setIsNotFoodError(false);
-              }}
-              onOpenRecipeScanner={onNavigateToScanRecipe}
             />
           )}
         </div>
