@@ -103,10 +103,7 @@ export const ScanRecipePage: React.FC<ScanRecipePageProps> = ({ onBack, onSucces
 
       setItems((prev) => [item, ...prev]);
       setLastAdded(item.name);
-      // Brief flash then clear
       setTimeout(() => setLastAdded(null), 2500);
-
-      // Vibrate for feedback on mobile
       navigator.vibrate?.(80);
     } catch (err: any) {
       setCameraError(err.message || t("log.qr_lookup_error", "Failed to look up product. Please try again."));
@@ -147,7 +144,6 @@ export const ScanRecipePage: React.FC<ScanRecipePageProps> = ({ onBack, onSucces
 
   return (
     <div className="flex-1 flex flex-col px-4 py-6 space-y-5 overflow-y-auto pb-28 max-w-md mx-auto w-full">
-      {/* Header */}
       <div className="flex items-center gap-3">
         <button onClick={onBack}
           className="p-2 rounded-xl bg-gray-900 border border-gray-800 hover:bg-gray-850 text-gray-400 hover:text-white transition-all">
@@ -163,7 +159,6 @@ export const ScanRecipePage: React.FC<ScanRecipePageProps> = ({ onBack, onSucces
         </div>
       </div>
 
-      {/* Scanner */}
       <div className="relative rounded-2xl overflow-hidden bg-gray-950 border border-gray-800 h-52 flex items-center justify-center">
         <video ref={videoRef} muted playsInline autoPlay
           className={`h-full w-full object-cover ${scanning ? "block" : "hidden"}`}
@@ -203,7 +198,6 @@ export const ScanRecipePage: React.FC<ScanRecipePageProps> = ({ onBack, onSucces
           </>
         )}
 
-        {/* Last added flash */}
         {lastAdded && (
           <div className="absolute bottom-3 left-3 right-3 bg-teal-500/90 rounded-xl px-3 py-2 flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4 text-white shrink-0" />
@@ -227,20 +221,19 @@ export const ScanRecipePage: React.FC<ScanRecipePageProps> = ({ onBack, onSucces
         </button>
       )}
 
-      {/* Running totals */}
       {items.length > 0 && (
         <GlassCard className="space-y-3">
           <div className="flex items-center justify-between text-xs text-gray-400">
             <span className="font-semibold uppercase tracking-wider">
-              {t("recipe.total", "Total")} · {items.length} {t("recipe.items", "items")}
+              {t("recipe.total", "Total")} &middot; {items.length} {t("recipe.items", "items")}
             </span>
           </div>
           <div className="grid grid-cols-4 gap-2">
             {[
-              { label: "Kcal",  value: totals.calories, color: "text-white" },
+              { label: "Kcal", value: String(totals.calories), color: "text-white" },
               { label: t("log.protein", "Prot."), value: `${totals.protein}g`, color: "text-amber-400" },
               { label: t("log.carbs", "Carbs"), value: `${totals.carbs}g`, color: "text-emerald-400" },
-              { label: t("log.fat", "Fat"),   value: `${totals.fat}g`, color: "text-indigo-400" },
+              { label: t("log.fat", "Fat"), value: `${totals.fat}g`, color: "text-indigo-400" },
             ].map((m) => (
               <div key={m.label} className="flex flex-col items-center bg-gray-800/50 rounded-xl py-2 px-1">
                 <span className={`text-sm font-bold ${m.color}`}>{m.value}</span>
@@ -251,7 +244,6 @@ export const ScanRecipePage: React.FC<ScanRecipePageProps> = ({ onBack, onSucces
         </GlassCard>
       )}
 
-      {/* Items list */}
       {items.length > 0 && (
         <div className="space-y-2">
           <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider px-1">
@@ -263,7 +255,7 @@ export const ScanRecipePage: React.FC<ScanRecipePageProps> = ({ onBack, onSucces
               <div className="flex-1 min-w-0">
                 <p className="text-xs font-semibold text-white truncate">{item.name}</p>
                 <p className="text-[10px] text-gray-500 mt-0.5">
-                  {item.calories} kcal · {item.protein}g {t("log.protein","prot")} · {item.carbs}g {t("log.carbs","carbs")} · {item.fat}g {t("log.fat","fat")}
+                  {item.calories} kcal &middot; {item.protein}g {t("log.protein", "prot")} &middot; {item.carbs}g {t("log.carbs", "carbs")} &middot; {item.fat}g {t("log.fat", "fat")}
                 </p>
               </div>
               <button onClick={() => removeItem(item.id)}
@@ -275,7 +267,6 @@ export const ScanRecipePage: React.FC<ScanRecipePageProps> = ({ onBack, onSucces
         </div>
       )}
 
-      {/* Save form */}
       {items.length > 0 && (
         <div className="space-y-3 pb-4">
           <div className="space-y-1.5">
@@ -306,7 +297,7 @@ export const ScanRecipePage: React.FC<ScanRecipePageProps> = ({ onBack, onSucces
               {t("recipe.clear_all", "Clear All")}
             </button>
             <button onClick={handleSave} disabled={saving}
-              className="flex-2 flex-grow bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-400 hover:to-teal-500 text-white rounded-xl py-3 text-sm font-bold flex items-center justify-center gap-2 transition-all disabled:opacity-50">
+              className="flex-[2] bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-400 hover:to-teal-500 text-white rounded-xl py-3 text-sm font-bold flex items-center justify-center gap-2 transition-all disabled:opacity-50">
               {saving
                 ? <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                 : <><span>{t("log.save_btn", "Save to Journal")}</span><ChevronRight className="w-4 h-4" /></>
@@ -318,7 +309,7 @@ export const ScanRecipePage: React.FC<ScanRecipePageProps> = ({ onBack, onSucces
 
       {items.length === 0 && !scanning && !fetching && (
         <p className="text-center text-xs text-gray-600 py-4">
-          {t("recipe.scanner_empty", "No items yet — start scanning to build your meal.")}
+          {t("recipe.scanner_empty", "No items yet - start scanning to build your meal.")}
         </p>
       )}
     </div>

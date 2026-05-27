@@ -116,7 +116,7 @@ export const QrScanTab: React.FC<QrScanTabProps> = ({
         </div>
         <div className="space-y-1">
           <h4 className="text-sm font-semibold text-white">{t("log.qr_unsupported_title", "Scanner not supported")}</h4>
-          <p className="text-xs text-gray-500 max-w-[240px]">{t("log.qr_unsupported_body", "Your browser does not support barcode scanning. Use the Photo tab to photograph the product label instead.")}</p>
+          <p className="text-xs text-gray-500 max-w-[240px]">{t("log.qr_unsupported_body", "Your browser does not support barcode scanning. Use the Photo tab instead.")}</p>
         </div>
       </div>
     );
@@ -124,7 +124,6 @@ export const QrScanTab: React.FC<QrScanTabProps> = ({
 
   return (
     <div className="space-y-4">
-      {/* Viewfinder — always in DOM so videoRef is always valid */}
       <div className="relative rounded-2xl overflow-hidden bg-gray-950 border border-gray-800 h-56 flex items-center justify-center">
         <video ref={videoRef} muted playsInline autoPlay
           className={`h-full w-full object-cover ${scanning ? "block" : "hidden"}`}
@@ -171,7 +170,6 @@ export const QrScanTab: React.FC<QrScanTabProps> = ({
         </div>
       )}
 
-      {/* Inline product preview — shown immediately after detection */}
       {preview && (
         <div className="space-y-3">
           <div className="flex items-center gap-2 text-xs text-teal-300">
@@ -181,12 +179,12 @@ export const QrScanTab: React.FC<QrScanTabProps> = ({
           <div className="bg-gray-900/60 border border-gray-800 rounded-2xl p-4 space-y-3">
             <p className="text-sm font-bold text-white leading-snug">{preview.dishName}</p>
             <div className="grid grid-cols-4 gap-2">
-              {([
-                { label: "Kcal",  value: Math.round(preview.macros?.calories ?? 0), color: "text-white" },
+              {[
+                { label: "Kcal", value: String(Math.round(preview.macros?.calories ?? 0)), color: "text-white" },
                 { label: t("log.protein", "Prot."), value: `${Math.round(preview.macros?.protein ?? 0)}g`, color: "text-amber-400" },
                 { label: t("log.carbs", "Carbs"), value: `${Math.round(preview.macros?.carbs ?? 0)}g`, color: "text-emerald-400" },
-                { label: t("log.fat", "Fat"),   value: `${Math.round(preview.macros?.fat ?? 0)}g`, color: "text-indigo-400" },
-              ] as const).map((m) => (
+                { label: t("log.fat", "Fat"), value: `${Math.round(preview.macros?.fat ?? 0)}g`, color: "text-indigo-400" },
+              ].map((m) => (
                 <div key={m.label} className="flex flex-col items-center bg-gray-800/50 rounded-xl py-2 px-1">
                   <span className={`text-sm font-bold ${m.color}`}>{m.value}</span>
                   <span className="text-[9px] text-gray-500 uppercase mt-0.5">{m.label}</span>
@@ -219,7 +217,7 @@ export const QrScanTab: React.FC<QrScanTabProps> = ({
           <button onClick={onOpenRecipeScanner}
             className="w-full bg-gray-900 hover:bg-gray-850 border border-gray-800 hover:border-teal-500/30 text-gray-300 hover:text-teal-300 rounded-xl py-2.5 text-xs font-semibold flex items-center justify-center gap-2 transition-all">
             <ListPlus className="w-4 h-4 text-teal-400" />
-            {t("log.qr_open_recipe_scanner", "Scan Multiple Items ? Recipe Builder")}
+            {t("log.qr_open_recipe_scanner", "Scan Multiple Items - Recipe Builder")}
           </button>
         </div>
       )}
