@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { ScanLine, AlertTriangle } from "lucide-react";
-import { BrowserMultiFormatReader, NotFoundException } from "@zxing/browser";
+import { BrowserMultiFormatReader } from "@zxing/browser";
+import type { IScannerControls } from "@zxing/browser";
+import { NotFoundException } from "@zxing/library";
 import type { FoodAnalysisResponse } from "../../lib/api";
 import { t } from "../../lib/i18n";
 
@@ -23,6 +25,7 @@ export const QrScanTab: React.FC<QrScanTabProps> = ({
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const readerRef = useRef<BrowserMultiFormatReader | null>(null);
+  const controlsRef = useRef<IScannerControls | null>(null);
 
   const [scanning, setScanning] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -34,7 +37,8 @@ export const QrScanTab: React.FC<QrScanTabProps> = ({
   }, []);
 
   const stopCamera = () => {
-    readerRef.current?.reset();
+    controlsRef.current?.stop();
+    controlsRef.current = null;
     readerRef.current = null;
     setScanning(false);
   };
@@ -49,7 +53,7 @@ export const QrScanTab: React.FC<QrScanTabProps> = ({
       readerRef.current = reader;
       setScanning(true);
 
-      await reader.decodeFromConstraints(
+      const controls = await reader.decodeFromConstraints(
         { video: { facingMode: "environment" } },
         videoRef.current!,
         (result, err) => {
@@ -64,6 +68,7 @@ export const QrScanTab: React.FC<QrScanTabProps> = ({
           }
         },
       );
+      controlsRef.current = controls;
     } catch (err: any) {
       setScanning(false);
       setCameraError(
