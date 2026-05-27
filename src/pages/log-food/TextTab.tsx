@@ -77,9 +77,7 @@ export const TextTab: React.FC<TextTabProps> = ({
         {loading ? (
           <>
             <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-            <span>
-              {t("log.analyzing", "AI Language Model Analyzing...")}
-            </span>
+            <span>{t("log.analyzing", "AI Language Model Analyzing...")}</span>
           </>
         ) : (
           <>
