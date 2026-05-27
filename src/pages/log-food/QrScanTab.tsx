@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { ScanLine, AlertTriangle } from "lucide-react";
+import { BrowserMultiFormatReader, NotFoundException } from "@zxing/browser";
 import type { FoodAnalysisResponse } from "../../lib/api";
 import { t } from "../../lib/i18n";
 
@@ -12,13 +13,8 @@ interface QrScanTabProps {
 /**
  * QR / Barcode scan tab.
  *
- * Uses the browser's native BarcodeDetector API where available
- * (Chrome 83+, Edge 83+, Safari 17.4+).  On unsupported browsers a
- * friendly fallback is shown so the user can still photograph a
- * product label via the Image tab.
- *
- * To wire up real nutrition lookup replace `handleBarcodeDetected`
- * with a call to your barcode → nutrition API (e.g. Open Food Facts).
+ * Uses @zxing/browser for cross-browser barcode + QR detection
+ * (works on Chrome, Firefox, Safari, Edge — no native API required).
  */
 export const QrScanTab: React.FC<QrScanTabProps> = ({
   onAnalysisComplete,
@@ -26,25 +22,20 @@ export const QrScanTab: React.FC<QrScanTabProps> = ({
   onClearError,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const streamRef = useRef<MediaStream | null>(null);
-  const animFrameRef = useRef<number>(0);
+  const readerRef = useRef<BrowserMultiFormatReader | null>(null);
 
   const [scanning, setScanning] = useState(false);
   const [loading, setLoading] = useState(false);
   const [cameraError, setCameraError] = useState<string | null>(null);
   const [detected, setDetected] = useState<string | null>(null);
-  const [supported, setSupported] = useState<boolean | null>(null);
 
-  // Check BarcodeDetector support on mount
   useEffect(() => {
-    setSupported("BarcodeDetector" in window);
     return () => stopCamera();
   }, []);
 
   const stopCamera = () => {
-    cancelAnimationFrame(animFrameRef.current);
-    streamRef.current?.getTracks().forEach((t) => t.stop());
-    streamRef.current = null;
+    readerRef.current?.reset();
+    readerRef.current = null;
     setScanning(false);
   };
 
@@ -54,19 +45,27 @@ export const QrScanTab: React.FC<QrScanTabProps> = ({
     setDetected(null);
 
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "environment" },
-      });
-      streamRef.current = stream;
-
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        await videoRef.current.play();
-      }
-
+      const reader = new BrowserMultiFormatReader();
+      readerRef.current = reader;
       setScanning(true);
-      scanLoop();
+
+      await reader.decodeFromConstraints(
+        { video: { facingMode: "environment" } },
+        videoRef.current!,
+        (result, err) => {
+          if (result) {
+            const code = result.getText();
+            stopCamera();
+            setDetected(code);
+            handleBarcodeDetected(code);
+          } else if (err && !(err instanceof NotFoundException)) {
+            // NotFoundException fires on every empty frame — safe to ignore
+            console.error(err);
+          }
+        },
+      );
     } catch (err: any) {
+      setScanning(false);
       setCameraError(
         err.name === "NotAllowedError"
           ? t(
@@ -77,39 +76,6 @@ export const QrScanTab: React.FC<QrScanTabProps> = ({
               (err.message ? " " + err.message : ""),
       );
     }
-  };
-
-  const scanLoop = () => {
-    if (!videoRef.current || !streamRef.current) return;
-
-    // @ts-ignore — BarcodeDetector not yet in TS lib
-    const detector = new window.BarcodeDetector({
-      formats: ["ean_13", "ean_8", "upc_a", "upc_e", "qr_code", "data_matrix"],
-    });
-
-    const tick = async () => {
-      if (!videoRef.current || videoRef.current.readyState < 2) {
-        animFrameRef.current = requestAnimationFrame(tick);
-        return;
-      }
-
-      try {
-        const barcodes = await detector.detect(videoRef.current);
-        if (barcodes.length > 0) {
-          const code = barcodes[0].rawValue as string;
-          stopCamera();
-          setDetected(code);
-          await handleBarcodeDetected(code);
-          return;
-        }
-      } catch {
-        // detector may throw on empty frames — continue scanning
-      }
-
-      animFrameRef.current = requestAnimationFrame(tick);
-    };
-
-    animFrameRef.current = requestAnimationFrame(tick);
   };
 
   const handleBarcodeDetected = async (barcode: string) => {
@@ -169,8 +135,8 @@ export const QrScanTab: React.FC<QrScanTabProps> = ({
     }
   };
 
-  // Browser doesn't support BarcodeDetector
-  if (supported === false) {
+  // Browser doesn't support getUserMedia at all
+  if (!navigator.mediaDevices?.getUserMedia) {
     return (
       <div className="border-2 border-dashed border-gray-800 rounded-2xl p-8 flex flex-col items-center justify-center text-center gap-4">
         <div className="bg-amber-500/10 p-4 rounded-full border border-amber-500/20 text-amber-400">
