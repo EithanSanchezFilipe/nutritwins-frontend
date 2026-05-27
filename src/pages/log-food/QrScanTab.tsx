@@ -24,7 +24,6 @@ export const QrScanTab: React.FC<QrScanTabProps> = ({
   onClearError,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const readerRef = useRef<BrowserMultiFormatReader | null>(null);
   const controlsRef = useRef<IScannerControls | null>(null);
 
   const [scanning, setScanning] = useState(false);
@@ -33,13 +32,14 @@ export const QrScanTab: React.FC<QrScanTabProps> = ({
   const [detected, setDetected] = useState<string | null>(null);
 
   useEffect(() => {
-    return () => stopCamera();
+    return () => {
+      controlsRef.current?.stop();
+    };
   }, []);
 
   const stopCamera = () => {
     controlsRef.current?.stop();
     controlsRef.current = null;
-    readerRef.current = null;
     setScanning(false);
   };
 
@@ -47,12 +47,11 @@ export const QrScanTab: React.FC<QrScanTabProps> = ({
     onClearError();
     setCameraError(null);
     setDetected(null);
+    // Set scanning first — video is always in the DOM so videoRef.current is valid
+    setScanning(true);
 
     try {
       const reader = new BrowserMultiFormatReader();
-      readerRef.current = reader;
-      setScanning(true);
-
       const controls = await reader.decodeFromConstraints(
         { video: { facingMode: "environment" } },
         videoRef.current!,
@@ -164,31 +163,19 @@ export const QrScanTab: React.FC<QrScanTabProps> = ({
 
   return (
     <div className="space-y-4">
-      {/* Viewfinder */}
+      {/* Viewfinder — video is always in the DOM so videoRef is always valid */}
       <div className="relative rounded-2xl overflow-hidden bg-gray-950 border border-gray-800 h-64 flex items-center justify-center">
-        {scanning ? (
-          <>
-            <video
-              ref={videoRef}
-              muted
-              playsInline
-              className="h-full w-full object-cover"
-            />
-            {/* Scan overlay */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="w-48 h-48 border-2 border-teal-400/70 rounded-xl relative">
-                <span className="absolute -top-px left-4 right-4 h-0.5 bg-teal-400 animate-[scan_2s_ease-in-out_infinite]" />
-              </div>
-            </div>
-            <button
-              onClick={stopCamera}
-              className="absolute top-3 right-3 bg-gray-950/80 backdrop-blur-md text-gray-300 hover:text-white p-2 rounded-xl border border-gray-800 transition-all text-xs font-semibold"
-            >
-              {t("log.qr_stop", "Stop")}
-            </button>
-          </>
-        ) : (
-          <div className="flex flex-col items-center gap-3 text-center px-6">
+        <video
+          ref={videoRef}
+          muted
+          playsInline
+          autoPlay
+          className={`h-full w-full object-cover ${scanning ? "block" : "hidden"}`}
+        />
+
+        {/* Placeholder shown before scanning starts */}
+        {!scanning && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-center px-6">
             <div className="bg-teal-500/10 p-4 rounded-full border border-teal-500/20 text-teal-400">
               <ScanLine className="w-7 h-7" />
             </div>
@@ -204,6 +191,23 @@ export const QrScanTab: React.FC<QrScanTabProps> = ({
               </p>
             </div>
           </div>
+        )}
+
+        {/* Scan overlay + stop button when camera is active */}
+        {scanning && (
+          <>
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className="w-48 h-48 border-2 border-teal-400/70 rounded-xl relative">
+                <span className="absolute -top-px left-4 right-4 h-0.5 bg-teal-400 animate-[scan_2s_ease-in-out_infinite]" />
+              </div>
+            </div>
+            <button
+              onClick={stopCamera}
+              className="absolute top-3 right-3 bg-gray-950/80 backdrop-blur-md text-gray-300 hover:text-white p-2 rounded-xl border border-gray-800 transition-all text-xs font-semibold"
+            >
+              {t("log.qr_stop", "Stop")}
+            </button>
+          </>
         )}
       </div>
 
